@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility Hub - UniMark</title>
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <link rel="apple-touch-icon" href="FrontEnd/assets/images/logo.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Dyslexia-friendly fonts -->
+    <link href="https://fonts.cdnfonts.com/css/lexie-readable" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/opendyslexic" rel="stylesheet">
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <div id="header"></div>
+
+    <main>
+        <div class="accessibility-container" style="padding-top: 40px;">
+            <div class="page-header">
+                <div class="header-with-actions">
+                    <h1><i class="fas fa-universal-access"></i> Accessibility Hub</h1>
+                    <div class="header-actions">
+                        <button id="accessibilityHelp" class="help-btn" aria-label="Accessibility Help">
+                            <i class="fas fa-question-circle"></i> Help
+                        </button>
+                    </div>
+                </div>
+                <p>Customize your experience to make the application more accessible for your needs. Your preferences will be saved automatically.</p>
+            </div>
+
+            <!-- Reading Support Section -->
+            <div class="accessibility-section">
+                <h2>Reading Support</h2>
+                
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Dyslexia-Friendly Font</h3>
+                        <p>Changes text to OpenDyslexic font, designed to increase readability for readers with dyslexia.</p>
+                    </div>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="dyslexiaFont" class="toggle-input">
+                        <label for="dyslexiaFont" class="toggle-label"></label>
+                    </div>
+                </div>
+
+                <div class="font-preview">
+                    <div class="font-preview-standard">
+                        <h4>Standard Font</h4>
+                        <p>This is how text appears with the standard font. The quick brown fox jumps over the lazy dog.</p>
+                    </div>
+                    <div class="font-preview-dyslexic">
+                        <h4>Dyslexia-Friendly Font</h4>
+                        <p>This is how text appears with the dyslexia-friendly font. The quick brown fox jumps over the lazy dog.</p>
+                    </div>
+                </div>
+
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Font Size</h3>
+                        <p>Adjust the text size throughout the application for better readability.</p>
+                    </div>
+                    <div class="option-controls">
+                        <div class="radio-group">
+                            <input type="radio" id="fontSizeNormal" name="fontSize" value="normal" checked>
+                            <label for="fontSizeNormal">Normal</label>
+                            
+                            <input type="radio" id="fontSizeLarge" name="fontSize" value="large">
+                            <label for="fontSizeLarge">Large</label>
+                            
+                            <input type="radio" id="fontSizeXLarge" name="fontSize" value="xlarge">
+                            <label for="fontSizeXLarge">Extra Large</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Letter Spacing</h3>
+                        <p>Increase spacing between letters to improve text readability.</p>
+                    </div>
+                    <div class="option-controls">
+                        <div class="radio-group">
+                            <input type="radio" id="letterSpacingStandard" name="letterSpacing" value="standard" checked>
+                            <label for="letterSpacingStandard">Standard</label>
+                            
+                            <input type="radio" id="letterSpacingWider" name="letterSpacing" value="wider">
+                            <label for="letterSpacingWider">Wider</label>
+                            
+                            <input type="radio" id="letterSpacingMaximum" name="letterSpacing" value="maximum">
+                            <label for="letterSpacingMaximum">Maximum</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Simplified Paragraph Layout</h3>
+                        <p>Increases spacing between paragraphs and lines for easier reading and focus.</p>
+                    </div>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="simplifiedLayout" class="toggle-input">
+                        <label for="simplifiedLayout" class="toggle-label"></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Preferences Section -->
+            <div class="accessibility-section">
+                <h2>Visual Preferences</h2>
+                
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>High Contrast Mode</h3>
+                        <p>Increases contrast between text and background for better visibility.</p>
+                    </div>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="highContrast" class="toggle-input">
+                        <label for="highContrast" class="toggle-label"></label>
+                    </div>
+                </div>
+
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Color Theme</h3>
+                        <p>Choose a color theme that works best for your visual needs.</p>
+                    </div>
+                    <div class="option-controls">
+                        <div class="radio-group">
+                            <input type="radio" id="themeDefault" name="colorTheme" value="default" checked>
+                            <label for="themeDefault">Default</label>
+                            
+                            <input type="radio" id="themeDark" name="colorTheme" value="dark">
+                            <label for="themeDark">Dark Mode</label>
+                            
+                            <input type="radio" id="themeLight" name="colorTheme" value="light">
+                            <label for="themeLight">Light Mode</label>
+                            
+                            <input type="radio" id="themeYellowBlue" name="colorTheme" value="yellowBlue">
+                            <label for="themeYellowBlue">Yellow on Blue</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Reduce Animations</h3>
+                        <p>Minimize or remove animations and transitions throughout the interface.</p>
+                    </div>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="reduceAnimations" class="toggle-input">
+                        <label for="reduceAnimations" class="toggle-label"></label>
+                    </div>
+                </div>
+
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Highlight Links</h3>
+                        <p>Make links more visually distinctive with additional styling.</p>
+                    </div>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="highlightLinks" class="toggle-input">
+                        <label for="highlightLinks" class="toggle-label"></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interface Adjustments Section -->
+            <div class="accessibility-section">
+                <h2>Interface Adjustments</h2>
+                
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Simplified Layout</h3>
+                        <p>Reduces visual complexity by simplifying the interface elements.</p>
+                    </div>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="simplifiedInterface" class="toggle-input">
+                        <label for="simplifiedInterface" class="toggle-label"></label>
+                    </div>
+                </div>
+
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Enhanced Focus Indicators</h3>
+                        <p>Makes keyboard focus more visible for better keyboard navigation.</p>
+                    </div>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="enhancedFocus" class="toggle-input">
+                        <label for="enhancedFocus" class="toggle-label"></label>
+                    </div>
+                </div>
+
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Touch Target Size</h3>
+                        <p>Adjust the size of buttons and interactive elements for easier selection.</p>
+                    </div>
+                    <div class="option-controls">
+                        <div class="radio-group">
+                            <input type="radio" id="targetSizeStandard" name="targetSize" value="standard" checked>
+                            <label for="targetSizeStandard">Standard</label>
+                            
+                            <input type="radio" id="targetSizeLarge" name="targetSize" value="large">
+                            <label for="targetSizeLarge">Large</label>
+                            
+                            <input type="radio" id="targetSizeXLarge" name="targetSize" value="xlarge">
+                            <label for="targetSizeXLarge">Extra Large</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accessibility-option">
+                    <div class="option-details">
+                        <h3>Content Width</h3>
+                        <p>Limit line length for easier reading and tracking.</p>
+                    </div>
+                    <div class="option-controls">
+                        <div class="radio-group">
+                            <input type="radio" id="contentWidthStandard" name="contentWidth" value="standard" checked>
+                            <label for="contentWidthStandard">Standard</label>
+                            
+                            <input type="radio" id="contentWidthNarrow" name="contentWidth" value="narrow">
+                            <label for="contentWidthNarrow">Narrow</label>
+                            
+                            <input type="radio" id="contentWidthVeryNarrow" name="contentWidth" value="veryNarrow">
+                            <label for="contentWidthVeryNarrow">Very Narrow</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accessibility-actions">
+                <button id="saveAccessibilityPreferences" class="btn-primary">
+                    <i class="fas fa-save"></i> Save All Preferences
+                </button>
+                <button id="resetAccessibilityDefaults" class="btn-outline">
+                    <i class="fas fa-undo"></i> Reset to Defaults
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+    
+    <!-- Help Modal -->
+    <div id="accessibilityHelpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-question-circle"></i> Accessibility Help</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4>About Accessibility Options</h4>
+                <p>This page allows you to customize the appearance and behavior of the application to make it more accessible for your specific needs.</p>
+                
+                <h4>Reading Support</h4>
+                <p>Options in this section help make text more readable, especially for users with dyslexia or visual impairments.</p>
+                
+                <h4>Visual Preferences</h4>
+                <p>These settings allow you to adjust contrast, colors, and animations to improve visibility and reduce visual distractions.</p>
+                
+                <h4>Interface Adjustments</h4>
+                <p>Use these options to simplify the interface, enhance keyboard navigation, and adjust the size of interactive elements.</p>
+                
+                <h4>Saving Your Preferences</h4>
+                <p>Your preferences are saved automatically when you toggle options. You can also use the "Save All Preferences" button to ensure all settings are stored.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Application Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/accessibility.js"></script>
+</body>
+</html> 

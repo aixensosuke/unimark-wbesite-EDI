@@ -1,0 +1,89 @@
+<!-- Default Header (Not Logged In) -->
+<header class="site-header" id="defaultHeader">
+    <div class="header-content">
+        <a href="/FrontEnd/index.html" class="logo">UniMark</a>
+            
+        <nav class="main-nav">
+            <ul>
+                <li><a href="/FrontEnd/index.html">Home</a></li>
+                <li><a href="/FrontEnd/components/about.html">About</a></li>
+                <li><a href="/FrontEnd/components/contacts.html">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="auth-buttons">
+            <a href="/FrontEnd/components/login.html" class="login-btn">Login</a>
+            <a href="/FrontEnd/components/signup.html" class="signup-btn">Sign Up</a>
+        </div>
+
+        <button class="menu-toggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+    </div>
+</header>
+
+<!-- Logged In Header -->
+<header class="site-header" id="loggedInHeader" style="display: none;">
+    <div class="header-content">
+        <div class="header-left">
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="/FrontEnd/index.html" class="header-logo">
+                <img src="/FrontEnd/assets/images/logo.png" alt="UniMark Logo" class="logo-img">
+            </a>
+            <span class="username" id="headerUsername">Loading...</span>
+        </div>
+
+        <div class="header-right">
+            <div class="header-actions">
+                <button class="action-btn" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="profile-menu">
+                    <button class="profile-trigger">
+                        <div class="profile-image">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+
+                    <div class="profile-dropdown">
+                        <div class="dropdown-header">
+                            <div class="profile-info">
+                                <span class="profile-name" id="dropdownProfileName">Loading...</span>
+                                <span class="profile-email" id="dropdownProfileEmail">loading@email.com</span>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <div class="dropdown-body">
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-user-circle"></i>
+                                Your profile
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <div class="dropdown-footer">
+                            <button id="headerLogoutBtn" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Sign out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

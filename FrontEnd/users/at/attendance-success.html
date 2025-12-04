@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Marked - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/attendance.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .success-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            text-align: center;
+            padding: 3rem;
+            background: var(--color-feature-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .success-icon {
+            font-size: 5rem;
+            color: #27bba9;
+            margin-bottom: 1.5rem;
+            animation: bounceIn 0.8s ease;
+        }
+        
+        .success-title {
+            font-size: 2.2rem;
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+        }
+        
+        .success-message {
+            font-size: 1.2rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .countdown {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #27bba9;
+            margin: 1.5rem 0;
+        }
+        
+        .redirect-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #27bba9;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .redirect-link:hover {
+            text-decoration: underline;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="success-container">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1 class="success-title">Attendance Marked Successfully!</h1>
+            <p class="success-message">Your attendance has been recorded. Thank you for using the UniMark attendance system.</p>
+            
+            <div class="countdown">
+                Redirecting in <span id="countdown">5</span> seconds
+            </div>
+            
+            <a href="at-dashboard.html" class="redirect-link">Go to Dashboard Now</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load components
+            loadComponents();
+            
+            // Initialize countdown
+            let secondsLeft = 5;
+            const countdownElement = document.getElementById('countdown');
+            
+            const countdownInterval = setInterval(function() {
+                secondsLeft--;
+                countdownElement.textContent = secondsLeft;
+                
+                if (secondsLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = 'at-dashboard.html';
+                }
+            }, 1000);
+        });
+        
+        async function loadComponents() {
+            try {
+                // Load components
+                const headerContainer = document.getElementById('header-container');
+                const sidebarContainer = document.getElementById('sidebar-container');
+                const footerContainer = document.getElementById('footer-container');
+
+                if (headerContainer && sidebarContainer && footerContainer) {
+                    const [headerResponse, sidebarResponse, footerResponse] = await Promise.all([
+                        fetch('at-header.html'),
+                        fetch('at-sidebar.html'),
+                        fetch('../../components/footer.html')
+                    ]);
+
+                    const [headerHtml, sidebarHtml, footerHtml] = await Promise.all([
+                        headerResponse.text(),
+                        sidebarResponse.text(),
+                        footerResponse.text()
+                    ]);
+
+                    headerContainer.innerHTML = headerHtml;
+                    sidebarContainer.innerHTML = sidebarHtml;
+                    footerContainer.innerHTML = footerHtml;
+                }
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        }
+    </script>
+</body>
+</html> 

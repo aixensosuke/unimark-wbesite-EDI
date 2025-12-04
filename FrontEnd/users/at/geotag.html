@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Slider -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="location-container">
+            <h2>Mark Your Attendance</h2>
+            
+            <!-- Map Container -->
+            <div id="map"></div>
+
+            <div class="location-info">
+                <div class="location-status">
+                    <i class="fas fa-circle-notch fa-spin"></i>
+                    <span>Initializing location services...</span>
+                </div>
+
+                <div class="location-details">
+                    <div class="location-detail">
+                        <div class="detail-label">Latitude</div>
+                        <div class="detail-value" id="latitude">-</div>
+                    </div>
+                    <div class="location-detail">
+                        <div class="detail-label">Longitude</div>
+                        <div class="detail-value" id="longitude">-</div>
+                    </div>
+                    <div class="location-detail">
+                        <div class="detail-label">Accuracy</div>
+                        <div class="detail-value" id="accuracy">-</div>
+                    </div>
+                    <div class="location-detail">
+                        <div class="detail-label">Distance to Target</div>
+                        <div class="detail-value" id="distance">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="verifyButton" class="mark-attendance-btn" disabled>
+                <i class="fas fa-map-marker-alt"></i>
+                Verify Location
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/geotag.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&libraries=geometry&callback=initMap" defer></script>
+</body>
+</html> 

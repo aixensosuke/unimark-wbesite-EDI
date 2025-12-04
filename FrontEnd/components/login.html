@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - UniMark</title>
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../assets/images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <div id="header"></div>
+
+    <main>
+        <div class="container">
+            <div class="form-container">
+                <h2>Login to UniMark</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="glowing-input-container">
+                            <input type="email" id="email" name="email" required class="glowing-input" placeholder="Enter your email">
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="glowing-input-container">
+                            <input type="password" id="password" name="password" required class="glowing-input" placeholder="Enter your password">
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <a href="#" id="forgotPasswordLink" class="forgot-password-link">Forgot Password?</a>
+                    </div>
+                    <div id="errorMessage" class="error-message"></div>
+                    <div id="successMessage" class="success-message"></div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                <p class="auth-link">Don't have an account? <a href="../components/signup.html">Sign Up</a></p>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <div id="resetPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Reset Password</h2>
+            <p>Enter your email address and we'll send you a link to reset your password.</p>
+            <form id="resetPasswordForm">
+                <div class="form-group">
+                    <label for="resetEmail">Email</label>
+                    <div class="glowing-input-container">
+                        <input type="email" id="resetEmail" name="resetEmail" required class="glowing-input" placeholder="Enter your email">
+                        <div class="glowing-input-border"></div>
+                        <div class="glowing-input-glow"></div>
+                    </div>
+                </div>
+                <div id="resetErrorMessage" class="error-message"></div>
+                <div id="resetSuccessMessage" class="success-message"></div>
+                <button type="submit" class="btn">Send Reset Link</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/cookie-manager.js"></script>
+    
+    <script>
+        // Initialize cookie manager as soon as possible
+        let cookieManagerInstance;
+        if (typeof CookieManager !== 'undefined') {
+            cookieManagerInstance = new CookieManager();
+            window.cookieManager = cookieManagerInstance;
+            console.log('CookieManager initialized early on login page');
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Try to initialize cookie manager again if it failed earlier
+            if (!window.cookieManager && typeof CookieManager !== 'undefined') {
+                window.cookieManager = new CookieManager();
+                console.log('CookieManager initialized during DOMContentLoaded');
+            }
+            
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Check for auto-login possibility
+            if (window.cookieManager) {
+                const authCookie = window.cookieManager.getCookie(window.cookieManager.authCookieName);
+                if (authCookie) {
+                    console.log('Auth cookie found on login page, attempting auto-login');
+                    window.cookieManager.attemptAutoLogin();
+                }
+            }
+            
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    // Reset messages
+                    if (errorMessage) errorMessage.style.display = 'none';
+                    if (successMessage) successMessage.style.display = 'none';
+                    
+                    // Get form data
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    const submitButton = loginForm.querySelector('button[type="submit"]');
+                    
+                    // Disable submit button
+                    if (submitButton) {
+                        submitButton.disabled = true;
+                        submitButton.textContent = 'Logging in...';
+                    }
+                    
+                    try {
+                        // Sign in with Firebase
+                        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                        const user = userCredential.user;
+                        
+                        console.log('User logged in successfully:', user.uid);
+                        
+                        // Determine user role by checking collections
+                        const collections = ['attendees', 'supervisors', 'organizations'];
+                        let userData = null;
+                        let userRole = null;
+                        
+                        for (const collection of collections) {
+                            try {
+                                const doc = await firebase.firestore().collection(collection).doc(user.uid).get();
+                                if (doc.exists) {
+                                    userData = doc.data();
+                                    userData.uid = user.uid;
+                                    userData.role = collection.endsWith('s') ? collection.slice(0, -1) : collection;
+                                    userRole = userData.role;
+                                    break;
+                                }
+                            } catch (error) {
+                                console.error(`Error checking ${collection}:`, error);
+                            }
+                        }
+                        
+                        if (userData) {
+                            // Save user data to session storage
+                            sessionStorage.setItem('userData', JSON.stringify(userData));
+                            
+                            // Save auth data to cookie for auto-login
+                            if (window.cookieManager) {
+                                window.cookieManager.saveAuthData(userData);
+                            }
+                            
+                            // Show success message
+                            if (successMessage) {
+                                successMessage.textContent = 'Login successful! Redirecting...';
+                                successMessage.style.display = 'block';
+                            }
+                            
+                            // Redirect to appropriate dashboard
+                            setTimeout(() => {
+                                const redirectMap = {
+                                    'attendee': '/FrontEnd/users/at/at-dashboard.html',
+                                    'supervisor': '/FrontEnd/users/sup/sup-dashboard.html',
+                                    'organization': '/FrontEnd/users/org/org-dashboard.html'
+                                };
+                                
+                                window.location.href = redirectMap[userRole] || '/FrontEnd/index.html';
+                            }, 1000);
+                        } else {
+                            // No user data found in any collection
+                            throw new Error('User account exists but no profile data found.');
+                        }
+                    } catch (error) {
+                        console.error('Login error:', error);
+                        
+                        // Show error message
+                        if (errorMessage) {
+                            errorMessage.textContent = error.message || 'Failed to login. Please check your credentials.';
+                            errorMessage.style.display = 'block';
+                        }
+                        
+                        // Re-enable submit button
+                        if (submitButton) {
+                            submitButton.disabled = false;
+                            submitButton.textContent = 'Login';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+

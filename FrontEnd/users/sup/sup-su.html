@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisor Sign Up - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <div id="header"></div>
+
+    <main>
+        <div class="form-container">
+            <h2>Supervisor Sign Up</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <div class="glowing-input-container">
+                        <input type="text" id="fullName" class="glowing-input" required>
+                        <div class="glowing-input-border"></div>
+                        <div class="glowing-input-glow"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="glowing-input-container">
+                        <input type="email" id="email" class="glowing-input" required>
+                        <div class="glowing-input-border"></div>
+                        <div class="glowing-input-glow"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="glowing-input-container">
+                        <input type="password" id="password" class="glowing-input" required>
+                        <div class="glowing-input-border"></div>
+                        <div class="glowing-input-glow"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="glowing-input-container">
+                        <input type="password" id="confirmPassword" class="glowing-input" required>
+                        <div class="glowing-input-border"></div>
+                        <div class="glowing-input-glow"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="supervisorId">Supervisor ID</label>
+                    <div class="glowing-input-container">
+                        <input type="text" id="supervisorId" class="glowing-input" required>
+                        <div class="glowing-input-border"></div>
+                        <div class="glowing-input-glow"></div>
+                    </div>
+                </div>
+                <div id="errorMessage" class="error-message"></div>
+                <div id="successMessage" class="success-message"></div>
+                <button type="submit" class="btn">Create Account</button>
+            </form>
+            <div class="auth-link">
+                <p>Already have an account? <a href="../../components/login.html">Login</a></p>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Load main.js for header/footer -->
+    <script src="../../js/main.js"></script>
+    
+    <!-- Load supervisor signup JS -->
+    <script src="../../js/supervisor-signup.js"></script>
+</body>
+</html> 

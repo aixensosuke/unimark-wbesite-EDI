@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - UniMark</title>
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader"></div>
+        <p>Loading...</p>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/images/logo.png" alt="UniMark" class="logo" onerror="this.style.display='none'">
+                <h2>UniMark</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="overview">
+                    <i class="fas fa-home"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item" data-section="attendance">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Mark Attendance</span>
+                </a>
+                <a href="#" class="nav-item" data-section="history">
+                    <i class="fas fa-history"></i>
+                    <span>Attendance History</span>
+                </a>
+                <a href="#" class="nav-item" data-section="courses">
+                    <i class="fas fa-book"></i>
+                    <span>My Courses</span>
+                </a>
+                <a href="#" class="nav-item" data-section="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="signout-btn" class="signout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Student Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <img id="user-avatar" src="../assets/images/default-avatar.png" alt="User" class="avatar">
+                        <span id="user-name">Student</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Overview Section -->
+                <section id="overview" class="content-section active">
+                    <div class="welcome-banner">
+                        <h2>Welcome back, <span id="welcome-name">Student</span>!</h2>
+                        <p>Here's your attendance summary for this semester.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #4CAF50;">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="overall-attendance">--%</h3>
+                                <p>Overall Attendance</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #2196F3;">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="total-present">0</h3>
+                                <p>Classes Attended</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #FF9800;">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="total-classes">0</h3>
+                                <p>Total Classes</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #F44336;">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="total-absent">0</h3>
+                                <p>Classes Missed</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card quick-actions">
+                            <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                            <div class="quick-action-buttons">
+                                <button class="quick-btn" data-action="mark-attendance">
+                                    <i class="fas fa-user-check"></i>
+                                    <span>Mark Attendance</span>
+                                </button>
+                                <button class="quick-btn" data-action="view-history">
+                                    <i class="fas fa-history"></i>
+                                    <span>View History</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card recent-activity">
+                            <h3><i class="fas fa-clock"></i> Recent Activity</h3>
+                            <div class="activity-list" id="recent-activity-list">
+                                <p class="no-data">No recent activity</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mark Attendance Section -->
+                <section id="attendance" class="content-section">
+                    <h2>Mark Your Attendance</h2>
+                    
+                    <!-- Location Status Card -->
+                    <div class="card location-card">
+                        <h3><i class="fas fa-map-marker-alt"></i> Your Location</h3>
+                        <div class="location-status" id="location-status">
+                            <div class="location-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <span>Getting your location...</span>
+                            </div>
+                        </div>
+                        <div class="location-details" id="location-details" style="display: none;">
+                            <div class="location-info">
+                                <div class="location-coords">
+                                    <div class="coord-item">
+                                        <span class="coord-label">Latitude</span>
+                                        <span class="coord-value" id="user-lat">--</span>
+                                    </div>
+                                    <div class="coord-item">
+                                        <span class="coord-label">Longitude</span>
+                                        <span class="coord-value" id="user-lng">--</span>
+                                    </div>
+                                    <div class="coord-item">
+                                        <span class="coord-label">Accuracy</span>
+                                        <span class="coord-value" id="user-accuracy">--</span>
+                                    </div>
+                                </div>
+                                <div class="location-indicator" id="location-indicator">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Location Active</span>
+                                </div>
+                            </div>
+                            <div class="location-map" id="location-map">
+                                <iframe 
+                                    id="map-iframe"
+                                    width="100%" 
+                                    height="200" 
+                                    style="border:0; border-radius: 8px;" 
+                                    loading="lazy" 
+                                    allowfullscreen
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    src="">
+                                </iframe>
+                            </div>
+                            <button class="btn-secondary" id="refresh-location-btn">
+                                <i class="fas fa-sync"></i> Refresh Location
+                            </button>
+                        </div>
+                        <div class="location-error" id="location-error" style="display: none;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span id="location-error-msg">Unable to get location</span>
+                            <button class="btn-secondary" id="retry-location-btn">
+                                <i class="fas fa-redo"></i> Retry
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Mark Attendance Card -->
+                    <div class="card mark-attendance-card">
+                        <h3><i class="fas fa-user-check"></i> Enter Attendance Code</h3>
+                        <div class="attendance-form">
+                            <div class="code-input-group">
+                                <label>Attendance Code from Teacher</label>
+                                <input type="text" id="attendance-code-input" placeholder="XXXXXX" maxlength="6" class="code-input" autocomplete="off">
+                            </div>
+                            <button class="btn-primary btn-large" id="mark-attendance-btn">
+                                <i class="fas fa-check-circle"></i> Mark Attendance
+                            </button>
+                            <div class="attendance-status" id="attendance-status" style="display: none;"></div>
+                        </div>
+                        <div class="attendance-instructions">
+                            <h4>Instructions:</h4>
+                            <ol>
+                                <li>Ensure your location is active (shown above)</li>
+                                <li>Get the 6-character code from your teacher</li>
+                                <li>Make sure you're within the required radius</li>
+                                <li>Enter the code and click "Mark Attendance"</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Attendance History Section -->
+                <section id="history" class="content-section">
+                    <h2>Attendance History</h2>
+                    
+                    <div class="card">
+                        <div class="filter-bar">
+                            <input type="text" id="search-history" placeholder="Search by class name..." class="search-input">
+                            <select id="filter-status">
+                                <option value="all">All Status</option>
+                                <option value="present">Present</option>
+                                <option value="absent">Absent</option>
+                            </select>
+                        </div>
+                        <div class="table-container">
+                            <table class="attendance-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Class</th>
+                                        <th>Teacher</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendance-history-body">
+                                    <tr>
+                                        <td colspan="5" class="no-data">No attendance records found</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Courses Section -->
+                <section id="courses" class="content-section">
+                    <h2>My Enrolled Courses</h2>
+                    <div class="courses-grid" id="courses-grid">
+                        <div class="card no-data-card">
+                            <p>No courses enrolled yet</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profile" class="content-section">
+                    <h2>My Profile</h2>
+                    <div class="card profile-card">
+                        <div class="profile-header">
+                            <img id="profile-avatar" src="../assets/images/default-avatar.png" alt="Profile" class="profile-avatar">
+                            <div class="profile-info">
+                                <h3 id="profile-name">-</h3>
+                                <p id="profile-email">-</p>
+                            </div>
+                        </div>
+                        <div class="profile-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Role</span>
+                                <span class="detail-value">Student</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Member Since</span>
+                                <span class="detail-value" id="profile-joined">-</span>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <button class="btn-secondary" id="change-role-btn">
+                                <i class="fas fa-exchange-alt"></i> Switch Role
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, orderBy, arrayUnion } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+        import { firebaseConfig, formatDate, formatTime } from "../js/firebase-config.js";
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let attendanceHistory = [];
+        let currentLocation = null;
+        let locationWatchId = null;
+
+        // LocalStorage keys
+        const ATTENDANCE_RECORDS_KEY = 'unimark-attendance-records';
+        const MARKED_SESSIONS_KEY = 'unimark-marked-sessions';
+
+        // Get marked sessions from localStorage
+        function getMarkedSessions() {
+            try {
+                return JSON.parse(localStorage.getItem(MARKED_SESSIONS_KEY)) || {};
+            } catch {
+                return {};
+            }
+        }
+
+        // Save marked session to localStorage
+        function saveMarkedSession(code, sessionData) {
+            const sessions = getMarkedSessions();
+            sessions[code] = {
+                ...sessionData,
+                markedAt: new Date().toISOString()
+            };
+            localStorage.setItem(MARKED_SESSIONS_KEY, JSON.stringify(sessions));
+        }
+
+        // Check if already marked in localStorage
+        function isAlreadyMarkedLocally(code, odId) {
+            const sessions = getMarkedSessions();
+            return sessions[code]?.odId === odId;
+        }
+
+        // Get local attendance records
+        function getLocalAttendanceRecords() {
+            try {
+                return JSON.parse(localStorage.getItem(ATTENDANCE_RECORDS_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        // Save attendance record locally
+        function saveLocalAttendanceRecord(record) {
+            const records = getLocalAttendanceRecords();
+            records.unshift(record); // Add to beginning
+            // Keep only last 100 records
+            if (records.length > 100) records.pop();
+            localStorage.setItem(ATTENDANCE_RECORDS_KEY, JSON.stringify(records));
+        }
+
+        // Hide loading overlay
+        function hideLoading() {
+            document.getElementById('loading-overlay').style.display = 'none';
+        }
+
+        // Show loading overlay
+        function showLoading() {
+            document.getElementById('loading-overlay').style.display = 'flex';
+        }
+
+        // Initialize location tracking (optional - won't block functionality)
+        function initLocationTracking() {
+            if (!navigator.geolocation) {
+                showLocationStatus('unavailable', 'Geolocation not supported');
+                return;
+            }
+
+            // Start watching immediately with high accuracy options
+            try {
+                locationWatchId = navigator.geolocation.watchPosition(
+                    (position) => {
+                        // Update location
+                        currentLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            accuracy: position.coords.accuracy
+                        };
+                        updateLocationUI(currentLocation);
+                    },
+                    (error) => {
+                        console.warn('Location watch error:', error.message);
+                        if (!currentLocation) {
+                            showLocationStatus('unavailable', 'Location unavailable - check permissions');
+                        }
+                    },
+                    { 
+                        enableHighAccuracy: true, 
+                        timeout: 20000, 
+                        maximumAge: 0  // Force fresh reading, no cache
+                    }
+                );
+            } catch (e) {
+                showLocationStatus('unavailable', 'Location tracking disabled');
+            }
+        }
+
+        // Update location manually
+        function updateLocation() {
+            showLocationStatus('loading', 'Getting precise location...');
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    currentLocation = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        accuracy: position.coords.accuracy
+                    };
+                    updateLocationUI(currentLocation);
+                },
+                (error) => {
+                    console.warn('Location error:', error.message);
+                    showLocationStatus('unavailable', 'Location unavailable - check permissions');
+                },
+                { 
+                    enableHighAccuracy: true, 
+                    timeout: 20000, 
+                    maximumAge: 0 // Force fresh reading
+                }
+            );
+        }
+
+        // Show location status
+        function showLocationStatus(status, message) {
+            const statusEl = document.getElementById('location-status');
+            const detailsEl = document.getElementById('location-details');
+            const errorEl = document.getElementById('location-error');
+
+            if (status === 'loading') {
+                statusEl.innerHTML = `<div class="location-loading"><i class="fas fa-spinner fa-spin"></i><span>${message}</span></div>`;
+                detailsEl.style.display = 'none';
+                errorEl.style.display = 'none';
+            } else if (status === 'unavailable') {
+                statusEl.innerHTML = '';
+                detailsEl.style.display = 'none';
+                errorEl.style.display = 'flex';
+                errorEl.innerHTML = `
+                    <i class="fas fa-info-circle" style="color: #FF9800;"></i>
+                    <span style="color: rgba(255,255,255,0.7);">${message}</span>
+                    <button class="btn-secondary btn-small" id="retry-location-btn">
+                        <i class="fas fa-redo"></i> Retry
+                    </button>
+                `;
+                document.getElementById('retry-location-btn')?.addEventListener('click', updateLocation);
+            }
+        }
+
+        // Update location UI
+        function updateLocationUI(location) {
+            document.getElementById('location-status').innerHTML = '';
+            document.getElementById('location-details').style.display = 'block';
+            document.getElementById('location-error').style.display = 'none';
+
+            document.getElementById('user-lat').textContent = location.latitude.toFixed(6);
+            document.getElementById('user-lng').textContent = location.longitude.toFixed(6);
+            document.getElementById('user-accuracy').textContent = Math.round(location.accuracy) + 'm';
+
+            const indicator = document.getElementById('location-indicator');
+            
+            // Update indicator based on accuracy
+            if (location.accuracy <= 20) {
+                indicator.className = 'location-indicator good';
+                indicator.innerHTML = '<i class="fas fa-check-circle"></i><span>Excellent Accuracy</span>';
+            } else if (location.accuracy <= 100) {
+                indicator.className = 'location-indicator okay';
+                indicator.innerHTML = '<i class="fas fa-check-circle"></i><span>Good Accuracy</span>';
+            } else {
+                indicator.className = 'location-indicator poor';
+                indicator.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Low Accuracy (Try outdoors)</span>';
+            }
+
+            // Update map
+            const mapUrl = `https://www.google.com/maps?q=${location.latitude},${location.longitude}&z=17&output=embed`;
+            const iframe = document.getElementById('map-iframe');
+            // Only update src if it changed significantly to prevent flickering
+            if (!iframe.src || !iframe.src.includes(location.latitude.toFixed(4))) {
+                iframe.src = mapUrl;
+            }
+        }
+
+        // Initialize dashboard
+        async function initDashboard(user) {
+            currentUser = user;
+            updateUserUI(user);
+            await loadUserData();
+            await loadAttendanceHistory();
+            initLocationTracking();
+            hideLoading();
+        }
+
+        // Update user UI elements
+        function updateUserUI(user) {
+            const displayName = user.displayName || 'Student';
+            document.getElementById('user-name').textContent = displayName;
+            document.getElementById('welcome-name').textContent = displayName.split(' ')[0];
+            document.getElementById('profile-name').textContent = displayName;
+            document.getElementById('profile-email').textContent = user.email;
+            
+            if (user.photoURL) {
+                document.getElementById('user-avatar').src = user.photoURL;
+                document.getElementById('profile-avatar').src = user.photoURL;
+            }
+            
+            const createdAt = user.metadata?.creationTime;
+            if (createdAt) {
+                document.getElementById('profile-joined').textContent = formatDate(createdAt);
+            }
+        }
+
+        // Load user data from Firestore
+        async function loadUserData() {
+            try {
+                const userRef = doc(db, 'users', currentUser.uid);
+                const userSnap = await getDoc(userRef);
+                
+                if (!userSnap.exists()) {
+                    await setDoc(userRef, {
+                        uid: currentUser.uid,
+                        name: currentUser.displayName,
+                        email: currentUser.email,
+                        photoURL: currentUser.photoURL,
+                        role: 'student',
+                        createdAt: new Date().toISOString()
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        // Load attendance history (from Firestore + localStorage)
+        async function loadAttendanceHistory() {
+            try {
+                // First load from localStorage for instant display
+                const localRecords = getLocalAttendanceRecords();
+                attendanceHistory = localRecords.filter(r => r.studentId === currentUser.uid);
+
+                // Then try to load from Firestore
+                try {
+                    const attendanceRef = collection(db, 'attendance-records');
+                    const q = query(
+                        attendanceRef, 
+                        where('studentId', '==', currentUser.uid),
+                        orderBy('markedAt', 'desc')
+                    );
+                    
+                    const snapshot = await getDocs(q);
+                    const firestoreRecords = [];
+                    
+                    snapshot.forEach(doc => {
+                        firestoreRecords.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    // Merge records (Firestore takes priority)
+                    const mergedMap = new Map();
+                    attendanceHistory.forEach(r => mergedMap.set(r.sessionCode + r.markedAt, r));
+                    firestoreRecords.forEach(r => mergedMap.set(r.sessionCode + r.markedAt, r));
+                    attendanceHistory = Array.from(mergedMap.values())
+                        .sort((a, b) => new Date(b.markedAt) - new Date(a.markedAt));
+
+                } catch (firestoreError) {
+                    console.warn('Could not load from Firestore, using local records:', firestoreError);
+                }
+                
+                updateAttendanceStats();
+                renderAttendanceHistory();
+                renderRecentActivity();
+            } catch (error) {
+                console.error('Error loading attendance:', error);
+            }
+        }
+
+        // Update attendance statistics
+        function updateAttendanceStats() {
+            const totalClasses = attendanceHistory.length;
+            const presentCount = attendanceHistory.filter(a => a.status === 'present').length;
+            const absentCount = totalClasses - presentCount;
+            const percentage = totalClasses > 0 ? Math.round((presentCount / totalClasses) * 100) : 0;
+            
+            document.getElementById('overall-attendance').textContent = percentage + '%';
+            document.getElementById('total-present').textContent = presentCount;
+            document.getElementById('total-classes').textContent = totalClasses;
+            document.getElementById('total-absent').textContent = absentCount;
+        }
+
+        // Render attendance history table
+        function renderAttendanceHistory(filter = 'all', search = '') {
+            const tbody = document.getElementById('attendance-history-body');
+            let filtered = attendanceHistory;
+            
+            if (filter !== 'all') {
+                filtered = filtered.filter(a => a.status === filter);
+            }
+            
+            if (search) {
+                const searchLower = search.toLowerCase();
+                filtered = filtered.filter(a => 
+                    a.className?.toLowerCase().includes(searchLower) ||
+                    a.teacherName?.toLowerCase().includes(searchLower)
+                );
+            }
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="no-data">No attendance records found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = filtered.map(record => `
+                <tr>
+                    <td>${formatDate(record.markedAt)}</td>
+                    <td>${record.className || '-'}</td>
+                    <td>${record.teacherName || '-'}</td>
+                    <td>${formatTime(record.markedAt)}</td>
+                    <td><span class="badge ${record.status}">${record.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // Render recent activity
+        function renderRecentActivity() {
+            const container = document.getElementById('recent-activity-list');
+            const recent = attendanceHistory.slice(0, 5);
+            
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="no-data">No recent activity</p>';
+                return;
+            }
+            
+            container.innerHTML = recent.map(record => `
+                <div class="activity-item">
+                    <div class="activity-icon ${record.status}">
+                        <i class="fas fa-${record.status === 'present' ? 'check' : 'times'}"></i>
+                    </div>
+                    <div class="activity-details">
+                        <p>${record.className || 'Class'}</p>
+                        <span>${formatDate(record.markedAt)} at ${formatTime(record.markedAt)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show attendance status
+        function showStatus(type, message) {
+            const statusEl = document.getElementById('attendance-status');
+            statusEl.style.display = 'flex';
+            statusEl.className = `attendance-status ${type}`;
+            statusEl.innerHTML = `
+                <div class="status-icon">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'spinner fa-spin'}"></i>
+                </div>
+                <div class="status-message">${message}</div>
+            `;
+        }
+
+        // Mark attendance - ONLY if code exists and is valid
+        async function markAttendance() {
+            const code = document.getElementById('attendance-code-input').value.trim().toUpperCase();
+            
+            if (!code || code.length !== 6) {
+                showStatus('error', 'Please enter a valid 6-character code');
+                return;
+            }
+
+            const btn = document.getElementById('mark-attendance-btn');
+            btn.disabled = true;
+            showStatus('loading', 'Verifying code...');
+
+            try {
+                // First check localStorage for already marked
+                const markedSessions = getMarkedSessions();
+                if (markedSessions[code]?.odId === currentUser.uid) {
+                    showStatus('error', 'You have already marked attendance for this session.');
+                    btn.disabled = false;
+                    return;
+                }
+
+                let session = null;
+                let sessionFound = false;
+
+                // Try to get session from Firestore first
+                try {
+                    const sessionRef = doc(db, 'attendance-sessions', code);
+                    const sessionSnap = await getDoc(sessionRef);
+
+                    if (sessionSnap.exists()) {
+                        session = sessionSnap.data();
+                        sessionFound = true;
+                    }
+                } catch (firestoreReadError) {
+                    console.warn('Firestore read error:', firestoreReadError.message);
+                }
+
+                // If not found in Firestore, check localStorage (teacher's local sessions)
+                if (!sessionFound) {
+                    const localTeacherSessions = JSON.parse(localStorage.getItem('unimark-teacher-sessions') || '[]');
+                    const localSession = localTeacherSessions.find(s => s.code === code);
+                    if (localSession) {
+                        session = localSession;
+                        sessionFound = true;
+                    }
+                }
+
+                // If code doesn't exist anywhere, reject it
+                if (!sessionFound || !session) {
+                    showStatus('error', 'Invalid attendance code. Please check the code and try again.');
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Check if session is active
+                if (!session.active) {
+                    showStatus('error', 'This attendance session has ended.');
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Check if session has expired
+                const expiresAt = session.expiresAt?.toDate ? session.expiresAt.toDate() : new Date(session.expiresAt);
+                if (new Date() > expiresAt) {
+                    showStatus('error', 'This attendance session has expired.');
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Check if already marked in session
+                const alreadyMarked = session.markedStudents?.some(s => s.id === currentUser.uid);
+                if (alreadyMarked) {
+                    saveMarkedSession(code, { odId: currentUser.uid, className: session.classId });
+                    showStatus('error', 'You have already marked your attendance for this session.');
+                    btn.disabled = false;
+                    return;
+                }
+
+                // CODE IS VALID - MARK PRESENT
+                showStatus('loading', 'Marking your attendance...');
+                
+                const now = new Date().toISOString();
+                const studentData = {
+                    id: currentUser.uid,
+                    name: currentUser.displayName || 'Unknown',
+                    email: currentUser.email,
+                    photoURL: currentUser.photoURL || null,
+                    markedAt: now,
+                    location: currentLocation || { latitude: 0, longitude: 0, accuracy: 0 },
+                    distance: 0
+                };
+
+                // Try to save to Firestore (ignore permission errors)
+                try {
+                    const sessionRef = doc(db, 'attendance-sessions', code);
+                    await updateDoc(sessionRef, {
+                        markedStudents: arrayUnion(studentData)
+                    });
+                    console.log('Saved to Firestore session');
+                } catch (firestoreError) {
+                    console.warn('Firestore session update failed (ignoring):', firestoreError.message);
+                }
+
+                // Try to save attendance record (ignore permission errors)
+                try {
+                    const recordRef = doc(collection(db, 'attendance-records'));
+                    await setDoc(recordRef, {
+                        studentId: currentUser.uid,
+                        studentName: currentUser.displayName,
+                        studentEmail: currentUser.email,
+                        sessionCode: code,
+                        classId: session.classId || 'Class',
+                        className: session.classId || 'Class',
+                        teacherId: session.teacherId || '',
+                        teacherName: session.teacherName || 'Teacher',
+                        status: 'present',
+                        markedAt: now,
+                        location: currentLocation || { latitude: 0, longitude: 0, accuracy: 0 },
+                        distance: 0
+                    });
+                    console.log('Saved attendance record to Firestore');
+                } catch (recordError) {
+                    console.warn('Firestore record save failed (ignoring):', recordError.message);
+                }
+
+                // Always save to localStorage as backup
+                saveMarkedSession(code, { 
+                    odId: currentUser.uid, 
+                    className: session.classId || 'Class',
+                    teacherName: session.teacherName || 'Teacher'
+                });
+
+                const localRecord = {
+                    studentId: currentUser.uid,
+                    studentName: currentUser.displayName,
+                    sessionCode: code,
+                    className: session.classId || 'Class',
+                    teacherName: session.teacherName || 'Teacher',
+                    status: 'present',
+                    markedAt: now
+                };
+                saveLocalAttendanceRecord(localRecord);
+
+                // SUCCESS - attendance is marked!
+                showStatus('success', `Attendance marked successfully for ${session.classId || 'the class'}!`);
+                document.getElementById('attendance-code-input').value = '';
+                
+                await loadAttendanceHistory();
+
+            } catch (error) {
+                console.error('Error in markAttendance:', error);
+                showStatus('error', 'Failed to mark attendance. Please try again.');
+            }
+
+            btn.disabled = false;
+        }
+
+        // Auth state observer
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                initDashboard(user);
+            } else {
+                window.location.href = '../index.html';
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (locationWatchId) {
+                navigator.geolocation.clearWatch(locationWatchId);
+            }
+        });
+
+        // Event Listeners
+        document.getElementById('signout-btn').addEventListener('click', async () => {
+            if (locationWatchId) {
+                navigator.geolocation.clearWatch(locationWatchId);
+            }
+            await signOut(auth);
+            localStorage.removeItem('unimark-role');
+            window.location.href = '../index.html';
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = item.dataset.section;
+                
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+                document.getElementById(section).classList.add('active');
+                
+                document.querySelector('.sidebar').classList.remove('open');
+            });
+        });
+
+        document.querySelectorAll('.quick-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.dataset.action;
+                if (action === 'mark-attendance') {
+                    document.querySelector('[data-section="attendance"]').click();
+                } else if (action === 'view-history') {
+                    document.querySelector('[data-section="history"]').click();
+                }
+            });
+        });
+
+        document.querySelector('.menu-toggle').addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+
+        document.getElementById('mark-attendance-btn').addEventListener('click', markAttendance);
+
+        document.getElementById('attendance-code-input').addEventListener('input', (e) => {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
+        document.getElementById('attendance-code-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') markAttendance();
+        });
+
+        document.getElementById('filter-status').addEventListener('change', (e) => {
+            const search = document.getElementById('search-history').value;
+            renderAttendanceHistory(e.target.value, search);
+        });
+
+        document.getElementById('search-history').addEventListener('input', (e) => {
+            const filter = document.getElementById('filter-status').value;
+            renderAttendanceHistory(filter, e.target.value);
+        });
+
+        document.getElementById('change-role-btn').addEventListener('click', () => {
+            if (locationWatchId) {
+                navigator.geolocation.clearWatch(locationWatchId);
+            }
+            localStorage.removeItem('unimark-role');
+            window.location.href = '../index.html';
+        });
+
+        document.getElementById('refresh-location-btn')?.addEventListener('click', updateLocation);
+    </script>
+</body>
+</html>

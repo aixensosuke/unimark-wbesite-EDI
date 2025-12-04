@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Signup - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link rel="stylesheet" href="../../css/enhanced-signup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase Storage -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <div id="header"></div>
+
+    <main>
+        <div class="enhanced-form-container">
+            <div class="form-header">
+                <h2>Student Registration</h2>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="signupProgress"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Personal Info</div>
+                        </div>
+                        <div class="step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Academic Info</div>
+                        </div>
+                        <div class="step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Account Setup</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="enhancedSignupForm">
+                <!-- Step 1: Personal Information -->
+                <div class="form-step" id="step1">
+                    <h3>Personal Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <div class="glowing-input-container">
+                            <input type="text" id="firstName" class="glowing-input" required>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <div class="field-error" id="firstNameError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="middleName">Middle Name</label>
+                        <div class="glowing-input-container">
+                            <input type="text" id="middleName" class="glowing-input">
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span class="required">*</span></label>
+                        <div class="glowing-input-container">
+                            <input type="text" id="lastName" class="glowing-input" required>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <div class="field-error" id="lastNameError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <div class="glowing-input-container">
+                            <input type="email" id="email" class="glowing-input" required>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <div class="field-error" id="emailError"></div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn next-btn" id="toStep2">Next</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Academic Information -->
+                <div class="form-step" id="step2" style="display: none;">
+                    <h3>Academic Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="collegeName">College Name <span class="required">*</span></label>
+                        <div class="glowing-input-container">
+                            <input type="text" id="collegeName" class="glowing-input" required list="collegeList">
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <datalist id="collegeList">
+                            <option value="UniMark College of Engineering">
+                            <option value="UniMark Institute of Technology">
+                            <option value="UniMark School of Business">
+                            <option value="UniMark Medical College">
+                            <option value="UniMark College of Arts and Sciences">
+                        </datalist>
+                        <div class="field-error" id="collegeNameError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="branch">Branch/Department <span class="required">*</span></label>
+                        <div class="glowing-input-container">
+                            <select id="branch" class="glowing-input" required>
+                                <option value="" disabled selected>Select your department</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Electrical">Electrical</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Chemical">Chemical</option>
+                                <option value="Biotechnology">Biotechnology</option>
+                                <option value="Business Administration">Business Administration</option>
+                                <option value="Medicine">Medicine</option>
+                                <option value="Arts">Arts</option>
+                                <option value="Sciences">Sciences</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <div class="field-error" id="branchError"></div>
+                    </div>
+                    
+                    <div class="form-group" id="otherBranchGroup" style="display: none;">
+                        <label for="otherBranch">Specify Branch/Department <span class="required">*</span></label>
+                        <div class="glowing-input-container">
+                            <input type="text" id="otherBranch" class="glowing-input">
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="prn">PRN (Permanent Registration Number) <span class="required">*</span></label>
+                        <div class="glowing-input-container">
+                            <input type="text" id="prn" class="glowing-input" required>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <div class="field-info">Format: Alphanumeric ID assigned by your institution</div>
+                        <div class="field-error" id="prnError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="validityPeriod">Enrollment/Validity Period <span class="required">*</span></label>
+                        <div class="date-range-container">
+                            <div class="glowing-input-container year-input">
+                                <select id="startYear" class="glowing-input" required>
+                                    <option value="" disabled selected>Start Year</option>
+                                </select>
+                                <div class="glowing-input-border"></div>
+                                <div class="glowing-input-glow"></div>
+                            </div>
+                            <span class="date-separator">-</span>
+                            <div class="glowing-input-container year-input">
+                                <select id="endYear" class="glowing-input" required>
+                                    <option value="" disabled selected>End Year</option>
+                                </select>
+                                <div class="glowing-input-border"></div>
+                                <div class="glowing-input-glow"></div>
+                            </div>
+                        </div>
+                        <div class="field-error" id="validityPeriodError"></div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn back-btn" id="backToStep1">Back</button>
+                        <button type="button" class="btn next-btn" id="toStep3">Next</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Account Setup -->
+                <div class="form-step" id="step3" style="display: none;">
+                    <h3>Account Setup</h3>
+                    
+                    <div class="form-group">
+                        <label for="password">Password <span class="required">*</span></label>
+                        <div class="glowing-input-container">
+                            <input type="password" id="password" class="glowing-input" required>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-meter">
+                                <div class="strength-bar" id="strengthBar"></div>
+                            </div>
+                            <div class="strength-text" id="strengthText">Password strength</div>
+                        </div>
+                        <div class="password-requirements">
+                            <p>Password must contain:</p>
+                            <ul>
+                                <li id="req-length">At least 8 characters</li>
+                                <li id="req-uppercase">At least one uppercase letter</li>
+                                <li id="req-lowercase">At least one lowercase letter</li>
+                                <li id="req-number">At least one number</li>
+                                <li id="req-special">At least one special character</li>
+                            </ul>
+                        </div>
+                        <div class="field-error" id="passwordError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                        <div class="glowing-input-container">
+                            <input type="password" id="confirmPassword" class="glowing-input" required>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <div class="field-error" id="confirmPasswordError"></div>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="newsletter" name="newsletter">
+                            <label for="newsletter">Subscribe to our newsletter for updates and announcements</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="cookieConsent" name="cookieConsent" required>
+                            <label for="cookieConsent">I agree to the <a href="../../components/cookie-policy.html" target="_blank">cookie policy</a> and <a href="../../components/privacy-policy.html" target="_blank">privacy policy</a> <span class="required">*</span></label>
+                        </div>
+                        <div class="field-error" id="cookieConsentError"></div>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="termsConditions" name="termsConditions" required>
+                            <label for="termsConditions">I agree to the <a href="../../components/terms-conditions.html" target="_blank">terms and conditions</a> <span class="required">*</span></label>
+                        </div>
+                        <div class="field-error" id="termsConditionsError"></div>
+                    </div>
+                    
+                    <div id="errorMessage" class="error-message"></div>
+                    <div id="successMessage" class="success-message"></div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn back-btn" id="backToStep2">Back</button>
+                        <button type="submit" class="btn submit-btn">Create Account</button>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="auth-link">
+                <p>Already have an account? <a href="../../components/login.html">Login</a></p>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Load main.js for header/footer -->
+    <script src="../../js/main.js"></script>
+    
+    <!-- Load enhanced signup JS -->
+    <script src="../../js/enhanced-signup.js"></script>
+    
+    <!-- Load cookie manager -->
+    <script src="../../js/cookie-manager.js"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - UniMark</title>
+  <link rel="icon" type="image/png" href="../assets/images/logo.png">
+  <link rel="apple-touch-icon" href="../assets/images/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+</head>
+<body>
+  <!-- Page Transition Animation -->
+  <div class="page-transition">
+    <div class="transition-slide slide-1"></div>
+    <div class="transition-slide slide-2"></div>
+  </div>
+
+  <!-- Custom Cursor -->
+  <div class="cursor"></div>
+
+  <div id="header"></div>
+  
+  <main>
+    <!-- About Hero Section -->
+    <section class="about-hero">
+      <div class="about-hero-content">
+        <h1>Our Story</h1>
+        <p>Revolutionizing attendance tracking through innovation and technology</p>
+      </div>
+      <div class="scroll-indicator">
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="about-section">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-image">
+            <img src="../assets/images/vision.jpg" alt="Our Vision">
+          </div>
+          <div class="about-content">
+            <h2>Our Vision</h2>
+            <p>At UniMark, we envision a future where attendance tracking is seamless, efficient, and intelligent. Our platform combines cutting-edge technology with intuitive design to create a solution that works for everyone.</p>
+            <p>We believe in the power of technology to transform education and workplace management, making it easier for institutions to focus on what truly matters: growth and development.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="about-section">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-content">
+            <h2>Our Mission</h2>
+            <p>Our mission is to provide institutions with the tools they need to effectively manage attendance while improving engagement and productivity. We're committed to developing solutions that are:</p>
+            <ul>
+              <li>Intuitive and easy to use</li>
+              <li>Secure and reliable</li>
+              <li>Scalable and flexible</li>
+              <li>Data-driven and intelligent</li>
+            </ul>
+          </div>
+          <div class="about-image">
+            <img src="../assets/images/mission.jpg" alt="Our Mission">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="about-section">
+      <div class="container">
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="about-stat-value">100+</div>
+            <div class="about-stat-label">Institutions</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-value">50K+</div>
+            <div class="about-stat-label">Users</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-value">99.9%</div>
+            <div class="about-stat-label">Uptime</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="about-section">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-image">
+            <img src="../assets/images/team.jpg" alt="Our Team">
+          </div>
+          <div class="about-content">
+            <h2>Our Team</h2>
+            <p>Behind UniMark is a team of passionate individuals dedicated to creating the best attendance tracking solution. Our diverse team brings together expertise in technology, education, and user experience design.</p>
+            <p>We're constantly innovating and improving our platform based on user feedback and emerging technologies.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Intersection Observer for animations
+    const observerOptions =
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) =>
+    {
+      entries.forEach(entry =>
+      {
+        if (entry.isIntersecting)
+        {
+          entry.target.classList.add('animate');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all about content sections
+    document.querySelectorAll('.about-content').forEach(element =>
+    {
+      observer.observe(element);
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Slider -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+<main>
+    <div class="dashboard-container" style="margin-top: 20px;"> 
+            <div class="action-buttons" style="grid-template-columns: repeat(2,1fr);">
+                <a href="#" class="action-btn" style="width: 620px;">
+                    <i class="fas fa-book-open"></i>
+                    <div class="btn-text">
+                        <h3 style="font-size: 1.8rem;">Create Assignments</h3>
+                        <p></p>
+                    </div>
+                </a>
+                <a href="#" class="action-btn" style="width: 620px;">
+                    <i class="fas fa-star"></i>
+                    <div class="btn-text">
+                        <h3 style="font-size: 1.8rem;">Grade Assignments</h3>
+                        <p></p>
+                    </div>
+                </a>
+            </div>
+            <br>
+            <hr class="divider" style="width: 78vw">
+            <br>
+            <div class="assignments-reports">
+                <a href="#" class="">
+                    <h1>Reports</h1>
+                </a>
+                <table class="content-table">
+                    <thead>
+                        <tr style="background-color: #009879; color: #ffffff">
+                            <th>Sr No.</th>
+                            <th>Name of Assignment</th>
+                            <th>Class</th>
+                            <th>Date Created</th>
+                            <th>No. of Submissions Received</th>
+                            <th>Deadline</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Assignment-2</td>
+                            <td>COMP-2</td>
+                            <td>04/05/2024</td>
+                            <td style="text-align: center;">49</td>
+                            <td>06/05/2024</td>
+                            <td>
+                                <a href="#" class="rep-btn">
+                                    <h6>View Report</h6>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr class="active-row">
+                            <td>2</td>
+                            <td>Assignment-2</td>
+                            <td>COMP-4</td>
+                            <td>04/05/2024</td>
+                            <td style="text-align: center;">25</td>
+                            <td>09/05/2024</td>
+                            <td>
+                                <a href="#" class="rep-btn">
+                                    <h6>View Report</h6>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Assignment-3</td>
+                            <td>MECH-1</td>
+                            <td>06/05/2024</td>
+                            <td style="text-align: center;">16</td>
+                            <td>15/05/2024</td>
+                            <td>
+                                <a href="#" class="rep-btn">
+                                    <h6>View Report</h6>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Assignment-2</td>
+                            <td>MECH-1</td>
+                            <td>05/05/2024</td>
+                            <td style="text-align: center;">62</td>
+                            <td>10/05/2024</td>
+                            <td>
+                                <a href="#" class="rep-btn">
+                                    <h6>View Report</h6>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Assignment-1</td>
+                            <td>COMP-2</td>
+                            <td>02/05/2024</td>
+                            <td style="text-align: center;">60</td>
+                            <td>08/05/2024</td>
+                            <td>
+                                <a href="#" class="rep-btn">
+                                    <h6>View Report</h6>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Assignment-1</td>
+                            <td>COMP-4</td>
+                            <td>02/05/2024</td>
+                            <td style="text-align: center;">64</td>
+                            <td>08/05/2024</td>
+                            <td>
+                                <a href="#" class="rep-btn">
+                                    <h6>View Report</h6>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+</main>
+
+<div id="footer"></div>
+<script src="../../js/firebase-auth.js"></script>
+<script src="../../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Dashboard - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <div id="header"></div>
+
+    <div id="slider"></div>
+
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="dashboard-container">
+            <div class="action-buttons">
+                <a href="#" class="action-btn">
+                    <i class="fas fa-user-alt"></i>
+                    <div class="btn-text">
+                        <h3>Add Attendee</h3>
+                        <p>Add a attendee</p>
+                    </div>
+                </a>
+                <a href="#" class="action-btn">
+                    <i class="fas fa-user-tie"></i>
+                    <div class="btn-text">
+                        <h3>Add Supervisor</h3>
+                        <p>Add a supervisor</p>
+                    </div>
+                </a>
+                <a href="#" class="action-btn">
+                    <i class="fas fa-users"></i>
+                    <div class="btn-text">
+                        <h3>Add Department</h3>
+                        <p>Add a department</p>
+                    </div>
+                </a>
+                <a href="#" class="action-btn">
+                    <i class="fas fa-university"></i>
+                    <div class="btn-text">
+                        <h3>Configure Organisation</h3>
+                        <p>Manage Organisation Settings</p>
+                    </div>
+                </a>
+                <a href="./reports.html" class="action-btn">
+                    <i class="fas fa-chart-pie"></i>
+                    <div class="btn-text">
+                        <h3>Reports</h3>
+                        <p>Download and view reports</p>
+                    </div>
+                </a>
+                <a href="department-settings.html" class="action-btn">
+                    <i class="fas fa-building"></i>
+                    <div class="btn-text">
+                        <h3>Departments</h3>
+                        <p>Configure Department settings</p>
+                    </div>
+                </a>
+                <a href="#" class="action-btn">
+                    <i class="fa fa-bullhorn"></i>
+                    <div class="btn-text">
+                        <h3>Announcements</h3>
+                        <p>Post a notice, announcement</p>
+                    </div>
+                </a>
+                <a href="#" class="action-btn">
+                    <i class="fas fa-calendar-day"></i>
+                    <div class="btn-text">
+                        <h3>Schedule</h3>
+                        <p>View or Edit Organisation Schedule</p>
+                    </div>
+                </a>
+                <a href="#" class="action-btn">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="btn-text">
+                        <h3>Alerts</h3>
+                        <p>View Alerts</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <hr class="divider">
+        <div class="dashboard-container">
+            <div class="features-grid">
+                <div class="stat-card">
+                    <div class="stat-value">203</div>
+                    <div class="stat-label">TOTAL ATTENDEES</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">TOTAL SUPERVISORS</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">TOTAL DEPARTMENTS</div>
+                </div>
+            </div>
+        </div>
+        
+        <hr class="divider">
+        
+        <!-- Departments Section -->
+            <h2 class="section-title" style="margin-left: 120px; padding: 5px;">Departments</h2>
+            <br>
+            <div class="department-container">
+                <div class="department-item" style="border: 0.5px solid #27bba9">
+                    <h3>Department Name</h3>
+                </div>
+                <div class="department-item" style="border: 0.5px solid #27bba9">
+                    <h3>No. of Attendees</h3>
+                </div>
+                <div class="department-item" style="border: 0.5px solid #27bba9">
+                    <h3>No. of Supervisors</h3>
+                </div>
+                <div class="department-item">
+                    <h3>Computer Engineering</h3>
+                </div>
+                <div class="department-value">
+                    <h3>234</h3>
+                </div>
+                <div class="department-value">
+                    <h3>15</h3>
+                </div>
+                <div class="department-item">
+                    <h3>Electronics and Telecommunication Engineering</h3>
+                </div>
+                <div class="department-value">
+                    <h3>113</h3>
+                </div>
+                <div class="department-value">
+                    <h3>14</h3>
+                </div>
+                <div class="department-item">
+                    <h3>Mechanical Engineering</h3>
+                </div>
+                <div class="department-value">
+                    <h3>119</h3>
+                </div>
+                <div class="department-value">
+                    <h3>16</h3>
+                </div>
+                <div class="department-item">
+                    <h3>Automation and Robotics</h3>
+                </div>
+                <div class="department-value">
+                    <h3>58</h3>
+                </div>
+                <div class="department-value">
+                    <h3>9</h3>
+                </div>
+            </div>
+        
+        <hr class="divider">
+    </main>
+
+
+    <div id="footer"></div>
+
+    <script type="module" src="../../js/firebase-auth.js"></script>
+    <script src="../../js/main.js"></script>
+</body>
+</html> 

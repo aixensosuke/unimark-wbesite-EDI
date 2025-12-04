@@ -1,0 +1,227 @@
+/* Custom Cursor Styles */
+body {
+    cursor: none;
+  }
+  
+  .cursor {
+    width: 12px;
+    height: 12px;
+    background-color: #27bba9;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 99999;
+    transition: transform 0.2s ease;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+    will-change: transform;
+  }
+  /* Custom cursor styles */
+  .cursor {
+    width: 12px;
+    height: 12px;
+    background-color: #27bba9;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 99999;
+    transition: transform 0.2s ease;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+    will-change: transform;
+  }
+
+  /* Light mode cursor */
+  body.light-theme .cursor {
+    background-color: #1a1a1a;
+    mix-blend-mode: difference;
+    opacity: 0.8;
+  }
+
+  /* Dark mode cursor */
+  body:not(.light-theme) .cursor {
+    background-color: #27bba9;
+    mix-blend-mode: difference;
+  }
+
+  /* Page Load Animation */
+  .page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100000;
+    pointer-events: none;
+  }
+  
+  .transition-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-100%);
+    pointer-events: none;
+  }
+  
+  .slide-1 {
+    background-color: #27bba9;
+    animation: slideIn 1.2s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+  }
+  
+  .slide-2 {
+    background-color: #000000;
+    animation: slideIn 1.2s cubic-bezier(0.7, 0, 0.3, 1) 0.3s forwards;
+  }
+  
+  @keyframes slideIn {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  /* Hover effect for interactive elements */
+  a,
+  button,
+  .signup-option {
+    cursor: none;
+  }
+  
+  a:hover ~ .cursor,
+  button:hover ~ .cursor,
+  .signup-option:hover ~ .cursor {
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  
+  /* Glowing Input Animations */
+  .glowing-input-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  /* Input field styling */
+  .glowing-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--color-text-muted);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--color-text);
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Border animation container */
+  .glowing-input-border {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 5px;
+    pointer-events: none;
+  }
+  
+  /* Glowing effect on focus */
+  .glowing-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+  
+  .glowing-input:focus + .glowing-input-border {
+    border: 2px solid var(--color-accent);
+    box-shadow: 0 0 15px var(--color-accent);
+  }
+  
+  /* Glow animation */
+  .glowing-input-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 5px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .glowing-input:focus ~ .glowing-input-glow {
+    opacity: 0.1;
+    background: var(--color-accent);
+  }
+  
+  /* Error state */
+  .glowing-input.error {
+    border-color: #ff3333;
+  }
+  
+  .glowing-input.error + .glowing-input-border {
+    border-color: #ff3333;
+  }
+  
+  .glowing-input.error:focus + .glowing-input-border {
+    box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+  }
+  
+  /* Success state */
+  .glowing-input.success {
+    border-color: #4CAF50;
+  }
+  
+  .glowing-input.success + .glowing-input-border {
+    border-color: #4CAF50;
+  }
+  
+  .glowing-input.success:focus + .glowing-input-border {
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+  }
+  
+  /* Checkmark Animation Styles */
+  .checkmark-container {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: transparent;
+    border-radius: 50%;
+  }
+  
+  .checkmark {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 3;
+    stroke: #ffffff;
+    stroke-miterlimit: 10;
+    box-shadow: inset 0 0 0 #27bba9;
+    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+  }
+  
+  .checkmark-path {
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    stroke: #ffffff;
+    animation: stroke .3s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.5));
+  }
+  
+  @keyframes stroke {
+    100% { stroke-dashoffset: 0; }
+  }
+  
+  @keyframes scale {
+    0%, 100% { transform: none; }
+    50% { transform: scale3d(1.1, 1.1, 1); }
+  }
+  
+  @keyframes fill {
+    100% { box-shadow: inset 0 0 0 30px #27bba9; }
+  }
+  
+  

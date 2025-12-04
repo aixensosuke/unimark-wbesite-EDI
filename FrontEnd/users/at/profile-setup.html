@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Setup - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link rel="stylesheet" href="../../css/profile-setup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.css">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase Storage -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <div id="header"></div>
+
+    <main>
+        <div class="profile-setup-container">
+            <div class="setup-header">
+                <h2>Complete Your Profile</h2>
+                <p>Let's set up your student profile to get the most out of UniMark</p>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="setupProgress"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Profile Photo</div>
+                        </div>
+                        <div class="step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Contact Info</div>
+                        </div>
+                        <div class="step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Preferences</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="profileSetupForm">
+                <!-- Step 1: Profile Photo -->
+                <div class="setup-step" id="step1">
+                    <h3>Profile Photo</h3>
+                    <p class="step-description">Add a profile photo to personalize your account and ID card</p>
+                    
+                    <div class="profile-photo-container">
+                        <div class="profile-photo-wrapper">
+                            <div class="profile-photo" id="profilePhotoPreview">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="photo-upload-overlay">
+                                <i class="fas fa-camera"></i>
+                                <span>Upload Photo</span>
+                            </div>
+                        </div>
+                        
+                        <div class="photo-guidelines">
+                            <h4>Photo Guidelines:</h4>
+                            <ul>
+                                <li>Clear, front-facing photo</li>
+                                <li>Neutral background</li>
+                                <li>Good lighting</li>
+                                <li>No sunglasses or hats</li>
+                                <li>Maximum size: 5MB</li>
+                                <li>Formats: JPG, PNG</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="file-input-container">
+                        <input type="file" id="profilePhotoInput" accept="image/jpeg, image/png" class="file-input">
+                        <label for="profilePhotoInput" class="file-input-label">
+                            <i class="fas fa-upload"></i>
+                            <span>Choose a file</span>
+                        </label>
+                        <div class="selected-file" id="selectedFileName">No file selected</div>
+                    </div>
+                    
+                    <div class="field-error" id="photoError"></div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn skip-btn" id="skipPhoto">Skip for now</button>
+                        <button type="button" class="btn next-btn" id="toStep2">Next</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Contact Information -->
+                <div class="setup-step" id="step2" style="display: none;">
+                    <h3>Contact Information</h3>
+                    <p class="step-description">Add your contact details so we can reach you with important updates</p>
+                    
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number <span class="required">*</span></label>
+                        <div class="glowing-input-container">
+                            <input type="tel" id="phoneNumber" class="glowing-input" required>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <div class="field-info">Format: Include country code (e.g., +1 for US)</div>
+                        <div class="field-error" id="phoneNumberError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="alternateEmail">Alternate Email</label>
+                        <div class="glowing-input-container">
+                            <input type="email" id="alternateEmail" class="glowing-input">
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                        <div class="field-info">Optional backup email for account recovery</div>
+                        <div class="field-error" id="alternateEmailError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <div class="glowing-input-container">
+                            <textarea id="address" class="glowing-input textarea" rows="3"></textarea>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <div class="glowing-input-container">
+                            <input type="text" id="city" class="glowing-input">
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="state">State/Province</label>
+                            <div class="glowing-input-container">
+                                <input type="text" id="state" class="glowing-input">
+                                <div class="glowing-input-border"></div>
+                                <div class="glowing-input-glow"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group half">
+                            <label for="zipCode">Postal/ZIP Code</label>
+                            <div class="glowing-input-container">
+                                <input type="text" id="zipCode" class="glowing-input">
+                                <div class="glowing-input-border"></div>
+                                <div class="glowing-input-glow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <div class="glowing-input-container">
+                            <select id="country" class="glowing-input">
+                                <option value="" disabled selected>Select your country</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="AU">Australia</option>
+                                <option value="IN">India</option>
+                                <!-- More countries will be added via JavaScript -->
+                            </select>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emergencyContact">Emergency Contact Name</label>
+                        <div class="glowing-input-container">
+                            <input type="text" id="emergencyContact" class="glowing-input">
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emergencyPhone">Emergency Contact Phone</label>
+                        <div class="glowing-input-container">
+                            <input type="tel" id="emergencyPhone" class="glowing-input">
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn back-btn" id="backToStep1">Back</button>
+                        <button type="button" class="btn next-btn" id="toStep3">Next</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Preferences -->
+                <div class="setup-step" id="step3" style="display: none;">
+                    <h3>Preferences</h3>
+                    <p class="step-description">Customize your experience with UniMark</p>
+                    
+                    <div class="form-group">
+                        <label>Notification Preferences</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="emailNotifications" name="emailNotifications" checked>
+                                <label for="emailNotifications">Email Notifications</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="smsNotifications" name="smsNotifications">
+                                <label for="smsNotifications">SMS Notifications</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="pushNotifications" name="pushNotifications" checked>
+                                <label for="pushNotifications">Push Notifications</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Notification Types</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="attendanceReminders" name="attendanceReminders" checked>
+                                <label for="attendanceReminders">Attendance Reminders</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="eventUpdates" name="eventUpdates" checked>
+                                <label for="eventUpdates">Event Updates</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="systemAnnouncements" name="systemAnnouncements" checked>
+                                <label for="systemAnnouncements">System Announcements</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="marketingUpdates" name="marketingUpdates">
+                                <label for="marketingUpdates">Marketing Updates</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="language">Preferred Language</label>
+                        <div class="glowing-input-container">
+                            <select id="language" class="glowing-input">
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                                <option value="hi">Hindi</option>
+                                <option value="zh">Chinese</option>
+                                <option value="ja">Japanese</option>
+                                <option value="ko">Korean</option>
+                                <option value="ar">Arabic</option>
+                            </select>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="theme">Theme Preference</label>
+                        <div class="glowing-input-container">
+                            <select id="theme" class="glowing-input">
+                                <option value="system">System Default</option>
+                                <option value="light">Light Mode</option>
+                                <option value="dark">Dark Mode</option>
+                            </select>
+                            <div class="glowing-input-border"></div>
+                            <div class="glowing-input-glow"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="accessibility">Accessibility Options</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="highContrast" name="highContrast">
+                                <label for="highContrast">High Contrast Mode</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="largeText" name="largeText">
+                                <label for="largeText">Larger Text</label>
+                            </div>
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="reduceMotion" name="reduceMotion">
+                                <label for="reduceMotion">Reduce Motion</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="errorMessage" class="error-message"></div>
+                    <div id="successMessage" class="success-message"></div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn back-btn" id="backToStep2">Back</button>
+                        <button type="submit" class="btn submit-btn">Complete Setup</button>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="setup-skip">
+                <p>Want to complete this later? <a href="at-dashboard.html">Go to Dashboard</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Image Cropper Modal -->
+    <div class="modal" id="cropperModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Crop Your Photo</h3>
+                <button type="button" class="close-btn" id="closeCropperModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="cropper-container">
+                    <img id="cropperImage" src="" alt="Image to crop">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn cancel-btn" id="cancelCrop">Cancel</button>
+                <button type="button" class="btn crop-btn" id="cropImage">Crop & Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Cropper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.12/dist/cropper.min.js"></script>
+    
+    <!-- Load main.js for header/footer -->
+    <script src="../../js/main.js"></script>
+    
+    <!-- Load profile setup JS -->
+    <script src="../../js/profile-setup.js"></script>
+    
+    <!-- Load cookie manager -->
+    <script src="../../js/cookie-manager.js"></script>
+</body>
+</html>

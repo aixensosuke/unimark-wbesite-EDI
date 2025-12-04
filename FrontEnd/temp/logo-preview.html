@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Preview - UniMark</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-text: #ffffff;
+            --color-background: #1a1a1a;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--color-background);
+            font-family: var(--font-family);
+        }
+
+        body.light-theme {
+            --color-text: #000000;
+            --color-background: #ffffff;
+        }
+
+        .logo-container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .logo {
+            font-family: 'Poppins', var(--font-family);
+            font-size: 4rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: lowercase;
+        }
+
+        body:not(.light-theme) .logo {
+            background: hsla(173, 65%, 44%, 1);
+            background: linear-gradient(0deg, hsla(173, 65%, 44%, 1) 0%, hsla(0, 0%, 83%, 1) 85%);
+            background: -moz-linear-gradient(0deg, hsla(173, 65%, 44%, 1) 0%, hsla(0, 0%, 83%, 1) 85%);
+            background: -webkit-linear-gradient(0deg, hsla(173, 65%, 44%, 1) 0%, hsla(0, 0%, 83%, 1) 85%);
+            filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#27BBA9", endColorstr="#D3D3D3", GradientType=1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        body.light-theme .logo {
+            background: hsla(173, 65%, 44%, 1);
+            background: linear-gradient(0deg, hsla(173, 65%, 44%, 1) 0%, hsla(0, 0%, 0%, 1) 85%);
+            background: -moz-linear-gradient(0deg, hsla(173, 65%, 44%, 1) 0%, hsla(0, 0%, 0%, 1) 85%);
+            background: -webkit-linear-gradient(0deg, hsla(173, 65%, 44%, 1) 0%, hsla(0, 0%, 0%, 1) 85%);
+            filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#27BBA9", endColorstr="#000000", GradientType=1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: 2px solid var(--color-text);
+            color: var(--color-text);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: var(--font-family);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--color-text);
+            color: var(--color-background);
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    <div class="logo-container">
+        <div class="logo">UniMark</div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+    </script>
+</body>
+</html> 

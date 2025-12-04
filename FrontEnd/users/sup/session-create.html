@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Attendance Session - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Page-specific styles */
+        .session-create-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--color-feature-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .session-create-container h2 {
+            color: var(--color-text);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .session-create-container h2 i {
+            color: #27bba9;
+        }
+
+        .session-form {
+            background: var(--color-feature-hover);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--color-text);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--color-feature-hover);
+            border-radius: 8px;
+            background: var(--color-feature-bg);
+            color: var(--color-text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #27bba9;
+            box-shadow: 0 0 0 2px rgba(39, 187, 169, 0.2);
+        }
+
+        .location-info {
+            background: var(--color-feature-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .location-info p {
+            color: var(--color-text-muted);
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .location-info i {
+            color: #27bba9;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: #27bba9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #229e8f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 187, 169, 0.2);
+        }
+
+        .active-sessions {
+            margin-top: 3rem;
+        }
+
+        .active-sessions h3 {
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .active-sessions h3 i {
+            color: #27bba9;
+        }
+
+        .sessions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .history-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .history-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sessions-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .session-card {
+            background: var(--color-feature-hover);
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .session-header h4 {
+            color: var(--color-text);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .session-code {
+            color: #27bba9;
+            font-weight: 600;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .session-status {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .session-status.active {
+            background: rgba(39, 187, 169, 0.1);
+            color: #27bba9;
+        }
+
+        .session-status.expired {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .session-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .session-details p {
+            color: var(--color-text-muted);
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .session-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--color-feature-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-feature-hover);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-feature-hover);
+            transform: translateY(-2px);
+        }
+
+        .status-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+            text-align: center;
+        }
+
+        .status-message.success {
+            display: block;
+            background: rgba(39, 187, 169, 0.1);
+            color: #27bba9;
+        }
+
+        .status-message.error {
+            display: block;
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .form-text {
+            display: block;
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .session-create-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .session-form {
+                padding: 1.5rem;
+            }
+
+            .sessions-list {
+                grid-template-columns: 1fr;
+            }
+
+            .session-actions {
+                flex-direction: column;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Sidebar -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="session-create-container">
+            <h2><i class="fas fa-plus-circle"></i>Create New Attendance Session</h2>
+            
+            <div class="session-form">
+                <div class="form-group">
+                    <label for="duration">Session Duration (seconds)</label>
+                    <input type="number" id="duration" min="1" max="28800" value="60">
+                    <small class="form-text">Maximum duration: 8 hours (28800 seconds)</small>
+                </div>
+
+                <div class="location-info">
+                    <p><i class="fas fa-map-marker-alt"></i> Target Location: <span id="latitude">18.5345657</span>, <span id="longitude">73.8802255</span></p>
+                    <p><i class="fas fa-ruler"></i> Allowed Radius: <span id="radius">50</span> meters</p>
+                </div>
+
+                <button id="create-session" class="btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Create Session
+                </button>
+            </div>
+
+            <!-- Active Sessions -->
+            <div class="active-sessions">
+                <div class="sessions-header">
+                    <h3><i class="fas fa-list-alt"></i> Active Sessions</h3>
+                    <div class="session-actions">
+                        <a href="session-history.html" class="btn-secondary history-btn">
+                            <i class="fas fa-history"></i> View Session History
+                        </a>
+                        <a href="attendance-records.html" class="btn-primary">
+                            <i class="fas fa-clipboard-check"></i> View Attendance Records
+                        </a>
+                    </div>
+                </div>
+                
+                <div id="sessions-list" class="sessions-list">
+                    <!-- Sessions will be dynamically loaded here -->
+                    <div id="empty-sessions" style="display: none;">
+                        <p><i class="fas fa-info-circle"></i> No active sessions found. Use the form above to create a new session.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Messages -->
+            <div id="status-message" class="status-message"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Session Card Template -->
+    <template id="session-card-template">
+        <div class="session-card">
+            <div class="session-header">
+                <h4>Session Code: <span class="session-code"></span></h4>
+                <span class="session-status active">Active</span>
+            </div>
+            <div class="session-details">
+                <p><i class="fas fa-clock"></i> Duration: <span class="session-duration"></span> seconds</p>
+                <p><i class="fas fa-hourglass-end"></i> Expires: <span class="session-expires"></span></p>
+                <p><i class="fas fa-users"></i> Attendees: <span class="session-attendees"></span></p>
+            </div>
+            <div class="session-actions">
+                <button class="btn-secondary end-session">
+                    <i class="fas fa-stop-circle"></i>
+                    End Session
+                </button>
+                <button class="btn-primary view-details">
+                    <i class="fas fa-eye"></i>
+                    View Details
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/session-create.js"></script>
+</body>
+</html> 

@@ -1,0 +1,316 @@
+/* Virtual ID Card Styles */
+/* Define specific colors for ID card to avoid conflicts with site theme */
+:root {
+    --id-card-primary: #27bba9;
+    --id-card-primary-dark: #1d9d8c;
+    --id-card-secondary: #409cff;
+    --id-card-secondary-dark: #3080d0;
+    --id-card-text-dark: #333333;
+    --id-card-text-light: #ffffff;
+    --id-card-text-muted: #666666;
+    --id-card-bg-light: #ffffff;
+    --id-card-bg-secondary: #f8f9fa;
+    --id-card-bg-tertiary: #f0f0f0;
+    --id-card-border: #eeeeee;
+}
+
+.id-card-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-header h1 {
+    font-size: 2rem;
+    color: var(--color-text); /* Use the site's text color variable */
+    margin: 0;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.primary-btn {
+    background-color: var(--id-card-primary);
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: var(--id-card-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.secondary-btn {
+    background-color: var(--id-card-secondary);
+    color: white;
+}
+
+.secondary-btn:hover {
+    background-color: var(--id-card-secondary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tertiary-btn {
+    background-color: var(--id-card-bg-secondary);
+    color: var(--id-card-text-dark);
+    text-decoration: none;
+}
+
+.tertiary-btn:hover {
+    background-color: var(--id-card-bg-tertiary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.id-card-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+    padding: 2rem 0;
+}
+
+/* ID Card Styling */
+.id-card {
+    width: 350px;
+    height: 550px;
+    background-color: var(--id-card-bg-light);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    animation: cardFadeIn 0.8s ease forwards;
+    color: var(--id-card-text-dark); /* Ensure text color is dark on light background */
+}
+
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.id-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.id-card-header {
+    background: linear-gradient(135deg, var(--id-card-primary), var(--id-card-secondary));
+    color: var(--id-card-text-light);
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.college-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+}
+
+.id-card-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.id-card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.photo-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 3px solid var(--id-card-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.student-info {
+    width: 100%;
+    text-align: center;
+}
+
+.student-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.3rem;
+    color: var(--id-card-text-dark);
+}
+
+.student-info p {
+    margin: 0 0 1rem 0;
+    color: var(--id-card-text-muted);
+    font-size: 1rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--id-card-text-dark);
+}
+
+.id-card-footer {
+    padding: 1.5rem;
+    background-color: var(--id-card-bg-secondary);
+    text-align: center;
+    border-top: 1px solid var(--id-card-border);
+}
+
+.id-card-footer svg {
+    max-width: 100%;
+    height: 60px;
+}
+
+.watermark {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #999;
+    font-style: italic;
+}
+
+/* Loading State */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--id-card-primary);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Error State */
+.error-container {
+    text-align: center;
+    padding: 2rem;
+    max-width: 400px;
+}
+
+.error-container i {
+    font-size: 3rem;
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
+
+.error-container h3 {
+    margin: 0 0 1rem 0;
+    color: var(--color-text); /* Use the site's text color variable */
+}
+
+.error-container p {
+    margin: 0 0 1.5rem 0;
+    color: var(--color-text-muted); /* Use the site's muted text color variable */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .action-buttons {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .id-card {
+        width: 300px;
+        height: 470px;
+    }
+    
+    .photo-container {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    .id-card, .id-card * {
+        visibility: visible;
+    }
+    
+    .id-card {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .action-buttons, #header, #footer, #slider, .sidebar, .sidebar-overlay, .cursor {
+        display: none !important;
+    }
+}

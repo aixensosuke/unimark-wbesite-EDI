@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Attendance - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .attendance-container {
+            max-width: 1200px;
+            margin: 120px auto 40px;
+            padding: 2rem;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .department-section {
+            margin-bottom: 3rem;
+            background: var(--color-feature-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--color-border);
+        }
+
+        .department-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .department-header i {
+            font-size: 2rem;
+            color: #27bba9;
+        }
+
+        .department-header h2 {
+            color: var(--color-text);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .division-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .division-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            background: var(--color-feature-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+
+        .division-btn i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #27bba9;
+        }
+
+        .division-btn h3 {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+            font-weight: 600;
+        }
+
+        .division-btn p {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Light mode styles */
+        [data-theme="light"] .department-section {
+            background: #ffffff;
+        }
+
+        [data-theme="light"] .division-btn {
+            background: #ffffff;
+            color: #333333;
+            border: 1px solid #e0e0e0;
+        }
+
+        [data-theme="light"] .division-btn:hover {
+            background: #f8f9fa;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(39, 187, 169, 0.15);
+            border-color: #27bba9;
+        }
+
+        /* Dark mode styles */
+        [data-theme="dark"] .division-btn:hover {
+            background: var(--color-feature-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(39, 187, 169, 0.2);
+            border-color: #27bba9;
+        }
+
+        @media screen and (max-width: 768px) {
+            .attendance-container {
+                padding: 1rem;
+                margin-top: 100px;
+            }
+
+            .department-section {
+                padding: 1.5rem;
+            }
+
+            .division-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <div id="header"></div>
+
+    <main>
+        <div class="attendance-container">
+            <div class="dashboard-header">
+                <h1>Welcome, <span id="userName">Supervisor</span></h1>
+                <p class="last-login">Last login: <span id="lastLogin">Loading...</span></p>
+            </div>
+
+            <!-- Computer Engineering Section -->
+            <div class="department-section">
+                <div class="department-header">
+                    <i class="fas fa-laptop-code"></i>
+                    <h2>Computer Engineering</h2>
+                </div>
+                <div class="division-grid">
+                    <a href="#" class="division-btn">
+                        <i class="fas fa-desktop"></i>
+                        <h3>COMP-1</h3>
+                        <p>Computer Engineering First Division</p>
+                    </a>
+                    <a href="#" class="division-btn">
+                        <i class="fas fa-laptop"></i>
+                        <h3>COMP-2</h3>
+                        <p>Computer Engineering Second Division</p>
+                    </a>
+                    <a href="#" class="division-btn">
+                        <i class="fas fa-microchip"></i>
+                        <h3>COMP-3</h3>
+                        <p>Computer Engineering Third Division</p>
+                    </a>
+                    <a href="#" class="division-btn">
+                        <i class="fas fa-code"></i>
+                        <h3>COMP-4</h3>
+                        <p>Computer Engineering Fourth Division</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mechanical Engineering Section -->
+            <div class="department-section">
+                <div class="department-header">
+                    <i class="fas fa-cogs"></i>
+                    <h2>Mechanical Engineering</h2>
+                </div>
+                <div class="division-grid">
+                    <a href="#" class="division-btn">
+                        <i class="fas fa-wrench"></i>
+                        <h3>MECH-1</h3>
+                        <p>Mechanical Engineering First Division</p>
+                    </a>
+                    <a href="#" class="division-btn">
+                        <i class="fas fa-tools"></i>
+                        <h3>MECH-2</h3>
+                        <p>Mechanical Engineering Second Division</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Electronics Engineering Section -->
+            <div class="department-section">
+                <div class="department-header">
+                    <i class="fas fa-microchip"></i>
+                    <h2>Electronics Engineering</h2>
+                </div>
+                <div class="division-grid">
+                    <a href="#" class="division-btn">
+                        <i class="fas fa-wave-square"></i>
+                        <h3>ENTC-1</h3>
+                        <p>Electronics and Telecommunication Engineering First Division</p>
+                    </a>
+                    <a href="#" class="division-btn">
+                        <i class="fas fa-satellite-dish"></i>
+                        <h3>ENTC-2</h3>
+                        <p>Electronics and Telecommunication Engineering Second Division</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Automation & Robotics Section -->
+            <div class="department-section">
+                <div class="department-header">
+                    <i class="fas fa-robot"></i>
+                    <h2>Automation & Robotics</h2>
+                </div>
+                <div class="division-grid">
+                    <a href="#" class="division-btn">
+                        <i class="fas fa-cog fa-spin"></i>
+                        <h3>A&R</h3>
+                        <p>Automation & Robotics Department</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script src="../../js/main.js"></script>
+    <script type="module">
+        // Get user data from session storage
+        const userData = JSON.parse(sessionStorage.getItem('userData'));
+        if (!userData) {
+            window.location.href = '../../components/login.html';
+        }
+
+        // Update user name
+        document.getElementById('userName').textContent = userData.fullName;
+
+        // Set last login time
+        const lastLogin = new Date().toLocaleString();
+        document.getElementById('lastLogin').textContent = lastLogin;
+    </script>
+</body>
+</html> 

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniMark - Smart Attendance Tracking</title>
+    <meta name="description" content="Transform your institution with innovative attendance tracking solution">
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <link rel="apple-touch-icon" href="assets/images/logo.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <div id="header"></div>
+
+    <!-- Role Selection Modal -->
+    <div id="role-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Welcome to UniMark!</h2>
+            <p>Select your role to continue to your dashboard</p>
+            <div class="role-buttons">
+                <button id="student-role-btn" class="role-btn">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>I'm a Student</span>
+                </button>
+                <button id="teacher-role-btn" class="role-btn">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>I'm a Teacher</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="hero">
+            <video autoplay muted loop playsinline class="hero-video">
+                <source src="assets/videos/hero-background.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>SMART PRESENCE<br>SEAMLESS TRACKING</h1>
+                <p>Transform your institution with our innovative attendance tracking solution. Simple, secure, and efficient.</p>
+                <button id="google-signin-btn" class="cta-button">
+                    <i class="fab fa-google"></i>
+                    <span>Sign in with Google</span>
+                </button>
+            </div>
+            <div class="scroll-indicator">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>KEY FEATURES</h2>
+                <div class="features-grid">
+                    <div class="feature">
+                        <h3>Real-time Tracking</h3>
+                        <p>Monitor attendance instantly with our advanced tracking system. Get live updates as students mark their presence.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Smart Analytics</h3>
+                        <p>Gain insights with comprehensive attendance analytics and reporting. Visualize trends and patterns effortlessly.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Mobile Access</h3>
+                        <p>Track and manage attendance from any device, anywhere. Fully responsive and optimized for all screens.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Secure Codes</h3>
+                        <p>Generate unique session codes for each class. Time-limited and location-aware for enhanced security.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Instant Reports</h3>
+                        <p>Generate detailed attendance reports automatically. Export data with just a few clicks.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Cloud Sync</h3>
+                        <p>All data synced securely to the cloud. Access your records anytime, from anywhere.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="container">
+                <div class="index-stats-grid">
+                    <div class="stat">
+                        <div class="stat-value">99.9%</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">10K+</div>
+                        <div class="stat-label">Active Users</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Support</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="js/main.js"></script>
+
+    <!-- Firebase Google Auth -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import { getAuth, signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzAJOsQoMYXAr_atquwY-1fMW8-g4xAa0",
+            authDomain: "timelyremind-1d361.firebaseapp.com",
+            projectId: "timelyremind-1d361",
+            storageBucket: "timelyremind-1d361.firebasestorage.app",
+            messagingSenderId: "257503539917",
+            appId: "1:257503539917:web:cf6066d5d640725f706f84"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        const signInBtn = document.getElementById('google-signin-btn');
+        const roleModal = document.getElementById('role-modal');
+        const studentRoleBtn = document.getElementById('student-role-btn');
+        const teacherRoleBtn = document.getElementById('teacher-role-btn');
+
+        function redirectToDashboard(role) {
+            if (role === 'student') {
+                window.location.href = 'components/student-dashboard.html';
+            } else if (role === 'teacher') {
+                window.location.href = 'components/teacher-dashboard.html';
+            }
+        }
+
+        function showRoleModal() {
+            roleModal.style.display = 'flex';
+        }
+
+        function hideRoleModal() {
+            roleModal.style.display = 'none';
+        }
+
+        studentRoleBtn.addEventListener('click', () => {
+            localStorage.setItem('unimark-role', 'student');
+            hideRoleModal();
+            redirectToDashboard('student');
+        });
+
+        teacherRoleBtn.addEventListener('click', () => {
+            localStorage.setItem('unimark-role', 'teacher');
+            hideRoleModal();
+            redirectToDashboard('teacher');
+        });
+
+        signInBtn.addEventListener('click', async () => {
+            if (auth.currentUser) {
+                await signOut(auth);
+                localStorage.removeItem('unimark-role');
+                return;
+            }
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (err) {
+                console.error('Google sign-in error:', err);
+                alert('Sign-in failed. Please try again.');
+            }
+        });
+
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                const name = user.displayName?.split(' ')[0] || user.email;
+                signInBtn.innerHTML = `<i class="fas fa-user-circle"></i><span>Hi, ${name} (Sign out)</span>`;
+                
+                const savedRole = localStorage.getItem('unimark-role');
+                if (savedRole) {
+                    redirectToDashboard(savedRole);
+                } else {
+                    showRoleModal();
+                }
+            } else {
+                signInBtn.innerHTML = `<i class="fab fa-google"></i><span>Sign in with Google</span>`;
+                hideRoleModal();
+            }
+        });
+
+        // Smooth scroll for indicator
+        document.querySelector('.scroll-indicator')?.addEventListener('click', () => {
+            document.querySelector('.features')?.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

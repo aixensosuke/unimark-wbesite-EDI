@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link rel="stylesheet" href="../../css/account-settings.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Slider -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+    <main>
+        <div class="account-settings-container">
+            <div class="settings-content">
+                <div class="settings-header">
+                    <h1>Settings</h1>
+                    <div class="settings-tabs">
+                        <div class="settings-tab active" data-tab="account">My Account</div>
+                        <div class="settings-tab" data-tab="general">General</div>
+                        <div class="settings-tab" data-tab="permissions">Permissions</div>
+                        <div class="settings-tab" data-tab="privacy">Data & Privacy</div>                        
+                        <div class="settings-tab" data-tab="devices">Devices</div>                                                                   
+                        <div class="settings-tab" data-tab="authentication">Passwords & Authentication</div>                                                                   
+                    </div>
+                </div>
+
+                <!-- My Account Section -->
+                <div id="account-section" class="settings-content-area active">
+                    <div class="account-banner">
+                        <div class="account-profile">
+                            <div class="account-avatar">
+                                <img src="../../assets/images/logo.png" alt="User Avatar">
+                                <div class="status-indicator online"></div>
+                            </div>
+                            <div class="account-username">
+                                <h2 id="displayName">Demo-sup</h2>
+                                <button class="edit-profile-btn">Edit User Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="account-details">
+                        <div class="account-field">
+                            <div class="field-label">Username</div>
+                            <div class="field-value" id="displayNameValue">Demo-sup</div>
+                            <button class="edit-btn">Edit</button>
+                        </div>
+                        <div class="account-field">
+                            <div class="field-label">Email</div>
+                            <div class="field-value" id="emailValue">********************</div>
+                            <button class="edit-btn">Edit</button>
+                        </div>
+                        
+                        <div class="account-field">
+                            <div class="field-label">Phone Number</div>
+                            <div class="field-value text-muted">You haven't added a phone number yet.</div>
+                            <button class="add-btn">Add</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- General Settings Section -->
+                <div id="general-section" class="settings-content-area">
+                    <div class="general-settings">
+                        <div class="settings-section">
+                            <div class="settings-section-header">
+                                App Settings
+                            </div>
+                            <div class="settings-option">
+                                <div class="option-info">
+                                    <div class="option-title">Dark Mode</div>
+                                    <div class="option-description">Keep dark mode as default</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" class="toggle-input" id="darkModeToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-option">
+                                <div class="option-info">
+                                    <div class="option-title">Animations</div>
+                                    <div class="option-description">Enable or disable animations throughout the app</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" class="toggle-input" id="animationsToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-option">
+                                <div class="option-info">
+                                    <div class="option-title">Language</div>
+                                    <div class="option-description">Select your preferred language</div>
+                                </div>
+                                <select class="settings-select" id="languageSelect">
+                                    <option value="en">English</option>
+                                    <option value="es">Español</option>
+                                    <option value="fr">Français</option>
+                                    <option value="de">Deutsch</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <div class="settings-section-header">
+                                Notifications
+                            </div>
+                            <div class="settings-option">
+                                <div class="option-info">
+                                    <div class="option-title">Email Notifications</div>
+                                    <div class="option-description">Receive email updates about your account</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" class="toggle-input" id="emailNotificationsToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-option">
+                                <div class="option-info">
+                                    <div class="option-title">Push Notifications</div>
+                                    <div class="option-description">Receive push notifications on your device</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" class="toggle-input" id="pushNotificationsToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-option">
+                                <div class="option-info">
+                                    <div class="option-title">Notification Sound</div>
+                                    <div class="option-description">Play a sound when you receive notifications</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" class="toggle-input" id="notificationSoundToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <div class="settings-section-header">
+                                Reports
+                            </div>
+                            <div class="settings-option">
+                                <div class="option-info">
+                                    <div class="option-title">Default Report</div>
+                                    <div class="option-description">Select default reports format</div>
+                                </div>
+                           
+                            <select class="settings-select" id="view-report-format">
+                                <option value="gr">Graph</option>
+                                <option value="tab">Table</option>
+                                <option value="chr">Chart</option>
+                                <option value="lst">List</option>
+                            </select>
+                            </div>
+                            <div class="settings-option">
+                                <div class="option-info">
+                                    <div class="option-title">Report Download</div>
+                                    <div class="option-description">Select default reports downloads format</div>
+                                </div>
+                           
+                            <select class="settings-select" id="view-report-format">
+                                <option value="exl">Excel Only</option>
+                                <option value="exlgrp">Excel and Graph</option>
+                                <option value="grp">Graph Only</option>
+                                <option value="csv">CSV</option>
+                                <option value="pdf">PDF</option>
+                            </select>
+                            </div>
+                            <div class="settings-option">
+                                <div class="option-info">
+                                    <div class="option-title">Monthly</div>
+                                    <div class="option-description">Download Monthly Report after clicking download</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" class="toggle-input" id="monthlyReportDownload" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permissions Section -->
+                <div id="permissions-section" class="settings-content-area">
+                    <div class="settings-section">
+                        <div class="settings-section-header">
+                            Permissions
+                        </div>
+                        <div class="settings-option">
+                            <div class="option-info">
+                                <div class="option-title">Location Access</div>
+                                <div class="option-description">Allow UniMark to access your location</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="toggle-input" id="locationToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-option">
+                            <div class="option-info">
+                                <div class="option-title">Camera Access</div>
+                                <div class="option-description">Allow UniMark to access your camera for ID verification</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="toggle-input" id="cameraToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Privacy Section -->
+                <div id="privacy-section" class="settings-content-area">
+                    <div class="settings-section">
+                        <div class="settings-section-header">
+                            Privacy Settings
+                        </div>
+                        <div class="settings-option">
+                            <div class="option-info">
+                                <div class="option-title">Profile Visibility</div>
+                                <div class="option-description">Control who can see your profile information</div>
+                            </div>
+                            <select class="settings-select" id="profileVisibilitySelect">
+                                <option value="all">Everyone</option>
+                                <option value="supervisors">Supervisors Only</option>
+                                <option value="none">Nobody</option>
+                            </select>
+                        </div>
+                        <div class="settings-option">
+                            <div class="option-info">
+                                <div class="option-title">Data Collection</div>
+                                <div class="option-description">Allow UniMark to collect usage data to improve services</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="toggle-input" id="dataCollectionToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Devices Section -->
+                <div id="devices-section" class="settings-content-area">
+                    <h2 class="settings-section-title">Devices</h2>
+                    
+                    <p class="settings-section-description">
+                        Here are all the devices that are currently logged in with your UniMark account. You can log out of each one 
+                        individually or all other devices.
+                    </p>
+                    <p class="settings-section-description">
+                        If you see an entry you don't recognize, log out of that device and change your UniMark account password
+                        immediately.
+                    </p>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Current Device</h3>
+                        
+                        <div class="device-item current-device">
+                            <div class="device-icon">
+                                <i class="fas fa-desktop"></i>
+                            </div>
+                            <div class="device-info">
+                                <div class="device-name">WINDOWS • CHROME</div>
+                                <div class="device-location">Pune, Maharashtra, India</div>
+                            </div>
+                            <div class="device-actions">
+                                <button class="auth-btn auth-btn-danger">Log Out</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Other Devices</h3>
+                        
+                        <div class="device-item other-device">
+                            <div class="device-icon warning-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="device-info">
+                                <div class="device-name">SOME OLDER DEVICES MAY NOT BE SHOWN HERE</div>
+                                <div class="device-location">To log them out, please <a href="#" class="link-accent">change your password</a></div>
+                            </div>
+                        </div>
+                        
+                        <div class="device-item">
+                            <div class="device-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="device-info">
+                                <div class="device-name">ANDROID • CHROME</div>
+                                <div class="device-location">Mumbai, Maharashtra, India • Last active 2 days ago</div>
+                            </div>
+                            <div class="device-actions">
+                                <button class="auth-btn auth-btn-danger">Log Out</button>
+                            </div>
+                        </div>
+                        
+                        <div class="device-item">
+                            <div class="device-icon">
+                                <i class="fas fa-tablet-alt"></i>
+                            </div>
+                            <div class="device-info">
+                                <div class="device-name">IPAD • SAFARI</div>
+                                <div class="device-location">Pune, Maharashtra, India • Last active 5 days ago</div>
+                            </div>
+                            <div class="device-actions">
+                                <button class="auth-btn auth-btn-danger">Log Out</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="auth-btn auth-btn-danger log-out-all-btn">Log Out All Other Devices</button>
+                </div>
+                
+                <!-- Authentication Section -->
+                <div id="authentication-section" class="settings-content-area">
+                    <h2 class="settings-section-title">Password and Authentication</h2>
+                    
+                    <div class="settings-section">
+                        <a href="#" class="auth-btn change-password-btn">
+                            Change Password
+                        </a>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Authenticator App</h3>
+                        <p class="settings-section-description">
+                            Protect your UniMark account with an extra layer of security. Once configured, 
+                            you'll be required to enter your password and complete one additional step in 
+                            order to sign in.
+                        </p>
+                        <a href="#" class="auth-btn enable-authenticator-btn">
+                            Enable Authenticator App
+                        </a>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Security Keys</h3>
+                        <p class="settings-section-description">
+                            Add an additional layer of protection to your account with a Security Key.
+                        </p>
+                        <a href="#" class="auth-btn register-security-key-btn">
+                            Register a Security Key
+                        </a>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Recovery Email</h3>
+                        <p class="settings-section-description">
+                            Add a recovery email in case you forget your own.
+                        </p>
+                        <a href="#" class="auth-btn register-security-key-btn">
+                            Add a Recovery Email
+                        </a>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-section-title">Account Removal</h3>
+                        <p class="settings-section-description">
+                            Disabling your account means you can recover it at any time after taking this action.
+                        </p>
+                        <div class="account-removal-buttons">
+                            <a href="#" class="auth-btn auth-btn-danger disable-account-btn">
+                                Disable Account
+                            </a>
+                            <a href="#" class="auth-btn auth-btn-danger delete-account-btn">
+                                Delete Account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Close Button -->
+            <button class="settings-close-btn">
+                <i class="fas fa-times"></i>
+                <span class="close-text">ESC</span>
+            </button>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script type="module" src="../../js/firebase-auth.js"></script>
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSettingsPage();
+            initializeSettingsToggles();
+            loadUserInfoForSettings();
+            initializeCursor();
+            initializeTheme();
+        });
+    </script>
+</body>
+</html> 

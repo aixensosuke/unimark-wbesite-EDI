@@ -1,0 +1,69 @@
+<!-- Logged In Header -->
+<header class="site-header" id="loggedInHeader" data-role="supervisor">
+    <div class="header-content">
+        <div class="header-left">
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <span class="username" id="headerUsername">Loading...</span>
+        </div>
+
+        <div class="header-right">
+            <div class="header-actions">
+                <a href="session-create.html">
+                    <button class="header-action-btn" aria-label="Create Session">
+                        <i class="fas fa-plus"></i>
+                        <span>New Session</span>
+                    </button>
+                </a>
+                <button class="notification-btn" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="profile-menu">
+                    <button class="profile-trigger">
+                        <div class="profile-image">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+
+                    <div class="profile-dropdown">
+                        <div class="dropdown-header">
+                            <div class="profile-info">
+                                <span class="profile-name" id="dropdownProfileName">Loading...</span>
+                                <span class="profile-email" id="dropdownProfileEmail">loading@email.com</span>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <div class="dropdown-body">
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-user-circle"></i>
+                                Your profile
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                            <a href="./attendance-records.html" class="dropdown-item">
+                                <i class="fas fa-chart-line"></i>
+                                Reports
+                            </a>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <div class="dropdown-footer">
+                            <button id="headerLogoutBtn" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Sign out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header> 

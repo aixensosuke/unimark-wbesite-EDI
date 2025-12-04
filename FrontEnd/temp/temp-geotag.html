@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance - UniMark</title>
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../assets/images/logo.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        #map {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .location-container {
+            max-width: 800px;
+            margin: 120px auto 40px;
+            padding: 2rem;
+            background: var(--color-feature-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .location-container h2 {
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .location-info {
+            background: var(--color-feature-hover);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .location-status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(39, 187, 169, 0.1);
+        }
+
+        .location-status i {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .location-status.success {
+            background: rgba(39, 187, 169, 0.1);
+            color: #27bba9;
+        }
+
+        .location-status.error {
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff4444;
+        }
+
+        .location-status.warning {
+            background: rgba(255, 152, 0, 0.1);
+            color: #ff9800;
+        }
+
+        .location-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .location-detail {
+            padding: 1rem;
+            background: var(--color-feature-bg);
+            border-radius: 8px;
+        }
+
+        .detail-label {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .custom-map-control-button {
+            background-color: var(--color-feature-bg);
+            color: var(--color-text);
+            border: 0;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+            margin: 10px;
+            padding: 0.5rem 1rem;
+            font-family: var(--font-family);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .custom-map-control-button:hover {
+            background: var(--color-feature-hover);
+            transform: translateY(-1px);
+        }
+
+        .mark-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            background: #27bba9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mark-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .mark-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .mark-btn:not(:disabled):hover {
+            background: #229e8e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39, 187, 169, 0.2);
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--color-text-muted);
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .accuracy-indicator {
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .accuracy-bar {
+            height: 100%;
+            background: #27bba9;
+            transition: width 0.3s ease;
+        }
+
+        /* Permission Request Styles */
+        .permission-request {
+            text-align: center;
+            padding: 2rem;
+            background: var(--color-feature-bg);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .permission-request i {
+            font-size: 3rem;
+            color: #27bba9;
+            margin-bottom: 1rem;
+        }
+
+        .permission-request h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .permission-request p {
+            color: var(--color-text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .permission-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .allow-btn, .deny-btn {
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .allow-btn {
+            background: #27bba9;
+            color: white;
+        }
+
+        .allow-btn:hover {
+            background: #229e8e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39, 187, 169, 0.2);
+        }
+
+        .deny-btn {
+            background: var(--color-feature-hover);
+            color: var(--color-text);
+        }
+
+        .deny-btn:hover {
+            background: var(--color-feature-bg);
+            transform: translateY(-2px);
+        }
+
+        .location-visualization {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: var(--color-feature-hover);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            display: none;
+        }
+
+        .location-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #4285F4;
+            border-radius: 50%;
+            border: 3px solid white;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .target-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #27bba9;
+            border-radius: 50%;
+            border: 3px solid white;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+        }
+
+        .distance-ring {
+            position: absolute;
+            border: 2px solid #27bba9;
+            border-radius: 50%;
+            opacity: 0.3;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .accuracy-circle {
+            position: absolute;
+            border: 2px solid #4285F4;
+            border-radius: 50%;
+            opacity: 0.2;
+            transform: translate(-50%, -50%);
+        }
+
+        .distance-label {
+            position: absolute;
+            background: var(--color-feature-bg);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--color-text);
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <main>
+        <div class="location-container">
+            <h2>Mark Your Attendance</h2>
+            
+            <!-- Map Container -->
+            <div id="map"></div>
+
+            <div class="location-info">
+                    <div class="location-status">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <span>Initializing location services...</span>
+                    </div>
+
+                <div class="location-details">
+                        <div class="location-detail">
+                            <div class="detail-label">Latitude</div>
+                            <div class="detail-value" id="latitude">-</div>
+                        </div>
+                        <div class="location-detail">
+                            <div class="detail-label">Longitude</div>
+                            <div class="detail-value" id="longitude">-</div>
+                        </div>
+                        <div class="location-detail">
+                            <div class="detail-label">Accuracy</div>
+                            <div class="detail-value" id="accuracy">-</div>
+                        </div>
+                        <div class="location-detail">
+                        <div class="detail-label">Distance to Target</div>
+                        <div class="detail-value" id="distance">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="markAttendance" class="mark-attendance-btn" disabled>
+                    <i class="fas fa-map-marker-alt"></i>
+                    Mark Attendance
+                </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Target location (example: your institution's coordinates)
+        const TARGET_LOCATION = {
+            lat: 18.5346107,
+            lng: 73.8802255,
+            radius: 50 // meters
+        };
+
+        let map, infoWindow, userMarker, targetMarker, radiusCircle;
+        let watchId = null;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: TARGET_LOCATION.lat, lng: TARGET_LOCATION.lng },
+                zoom: 18, // Increased zoom level for better detail
+                styles: [
+                    {
+                        "elementType": "geometry",
+                        "stylers": [{ "color": "#242f3e" }]
+                    },
+                    {
+                        "elementType": "labels.text.stroke",
+                        "stylers": [{ "color": "#242f3e" }]
+                    },
+                    {
+                        "elementType": "labels.text.fill",
+                        "stylers": [{ "color": "#746855" }]
+                    }
+                ]
+            });
+
+            infoWindow = new google.maps.InfoWindow();
+
+            // Create target location marker
+            targetMarker = new google.maps.Marker({
+                position: { lat: TARGET_LOCATION.lat, lng: TARGET_LOCATION.lng },
+                map: map,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 10,
+                    fillColor: "#27bba9",
+                    fillOpacity: 1,
+                    strokeWeight: 2,
+                    strokeColor: "#ffffff"
+                },
+                title: "Target Location"
+            });
+
+            // Create radius circle
+            radiusCircle = new google.maps.Circle({
+                map: map,
+                center: { lat: TARGET_LOCATION.lat, lng: TARGET_LOCATION.lng },
+                radius: TARGET_LOCATION.radius,
+                fillColor: "#27bba9",
+                fillOpacity: 0.1,
+                strokeColor: "#27bba9",
+                strokeWeight: 2
+            });
+
+            // Add location button
+            const locationButton = document.createElement("button");
+            locationButton.textContent = "Pan to Current Location";
+            locationButton.classList.add("custom-map-control-button");
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+
+            locationButton.addEventListener("click", () => {
+                getCurrentLocation();
+            });
+
+            // Start tracking location
+            getCurrentLocation();
+        }
+
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                // Clear existing watch if any
+                if (watchId) {
+                    navigator.geolocation.clearWatch(watchId);
+                }
+
+                watchId = navigator.geolocation.watchPosition(
+                    (position) => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+
+                        // Update user marker
+                        if (!userMarker) {
+                            userMarker = new google.maps.Marker({
+                                position: pos,
+                                map: map,
+                                icon: {
+                                    path: google.maps.SymbolPath.CIRCLE,
+                                    scale: 8,
+                                    fillColor: "#4285F4",
+                                    fillOpacity: 1,
+                                    strokeWeight: 2,
+                                    strokeColor: "#ffffff"
+                                },
+                                title: "Your Location"
+                            });
+                        } else {
+                            userMarker.setPosition(pos);
+                        }
+
+                        // Update info window
+                        infoWindow.setPosition(pos);
+                        infoWindow.setContent(`
+                            <div style="color: #333;">
+                                <strong>Your Location</strong><br>
+                                Accuracy: ±${Math.round(position.coords.accuracy)}m
+                            </div>
+                        `);
+                        infoWindow.open(map);
+
+                        // Fit bounds to show both markers
+                        const bounds = new google.maps.LatLngBounds();
+                        bounds.extend(pos);
+                        bounds.extend(TARGET_LOCATION);
+                        map.fitBounds(bounds);
+
+                        // Update location details
+                        updateLocationDetails(position);
+                    },
+                    (error) => {
+                        handleLocationError(true, infoWindow, map.getCenter(), error);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+        }
+
+        function updateLocationDetails(position) {
+            document.getElementById("latitude").textContent = position.coords.latitude.toFixed(6);
+            document.getElementById("longitude").textContent = position.coords.longitude.toFixed(6);
+            document.getElementById("accuracy").textContent = `±${Math.round(position.coords.accuracy)}m`;
+
+            // Calculate distance using Haversine formula
+            const distance = calculateDistance(
+                position.coords.latitude,
+                position.coords.longitude,
+                TARGET_LOCATION.lat,
+                TARGET_LOCATION.lng
+            );
+
+            document.getElementById("distance").textContent = `${Math.round(distance)}m`;
+
+            // Update status and button state
+            const statusDiv = document.querySelector(".location-status");
+            const markAttendanceBtn = document.getElementById("markAttendance");
+
+            if (distance <= TARGET_LOCATION.radius && position.coords.accuracy <= 50) {
+                statusDiv.className = "location-status success";
+                statusDiv.innerHTML = '<i class="fas fa-check-circle"></i><span>You are within the allowed area</span>';
+                markAttendanceBtn.disabled = false;
+            } else if (position.coords.accuracy > 50) {
+                statusDiv.className = "location-status warning";
+                statusDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Waiting for better accuracy...</span>';
+                markAttendanceBtn.disabled = true;
+            } else {
+                statusDiv.className = "location-status error";
+                statusDiv.innerHTML = `<i class="fas fa-times-circle"></i><span>You are ${Math.round(distance)}m away from the allowed area</span>`;
+                markAttendanceBtn.disabled = true;
+            }
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371e3; // Earth's radius in meters
+            const φ1 = lat1 * Math.PI/180;
+            const φ2 = lat2 * Math.PI/180;
+            const Δφ = (lat2-lat1) * Math.PI/180;
+            const Δλ = (lon2-lon1) * Math.PI/180;
+
+            const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ/2) * Math.sin(Δλ/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+            return R * c; // Distance in meters
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos, error) {
+            const statusDiv = document.querySelector(".location-status");
+            statusDiv.className = "location-status error";
+            
+            let errorMessage = browserHasGeolocation
+                ? (error ? `Error: ${getGeolocationErrorMessage(error)}` : "Error: The Geolocation service failed.")
+                : "Error: Your browser doesn't support geolocation.";
+
+            statusDiv.innerHTML = `<i class="fas fa-times-circle"></i><span>${errorMessage}</span>`;
+            
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(errorMessage);
+            infoWindow.open(map);
+        }
+
+        function getGeolocationErrorMessage(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    return "Location permission denied.";
+                case error.POSITION_UNAVAILABLE:
+                    return "Location information unavailable.";
+                case error.TIMEOUT:
+                    return "Location request timed out.";
+                default:
+                    return "An unknown error occurred.";
+            }
+        }
+
+        // Handle mark attendance button click
+        document.getElementById("markAttendance")?.addEventListener("click", () => {
+            const button = document.getElementById("markAttendance");
+            button.disabled = true;
+            button.innerHTML = `
+                <div class="checkmark-container">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <path class="checkmark-path" d="M14 27 L22 35 L38 15" />
+                    </svg>
+                </div>
+            `;
+            
+            setTimeout(() => {
+            window.location.href = "temp-dashboard.html";
+            }, 2000);
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('unload', () => {
+            if (watchId) {
+                navigator.geolocation.clearWatch(watchId);
+            }
+        });
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&libraries=geometry&callback=initMap" defer></script>
+</body>
+</html> 

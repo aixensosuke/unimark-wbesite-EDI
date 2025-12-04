@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Details - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- SheetJS (for Excel export) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        /* Page-specific styles */
+        .session-details-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--color-feature-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .session-details-container h2 {
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .session-details-container h2 i {
+            color: #27bba9;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: #27bba9;
+        }
+
+        .session-info-card {
+            background: var(--color-feature-hover);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .session-title {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .session-code {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #27bba9;
+            letter-spacing: 1px;
+        }
+
+        .session-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .session-status.active {
+            background: rgba(39, 187, 169, 0.1);
+            color: #27bba9;
+        }
+
+        .session-status.expired,
+        .session-status.ended {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .session-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .meta-label {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .meta-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .session-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary, .btn-danger {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #27bba9;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #229e8f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 187, 169, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--color-feature-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-feature-hover);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-feature-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: rgba(220, 53, 69, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .attendees-section {
+            margin-top: 2rem;
+        }
+
+        .attendees-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .attendee-count {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .attendee-count i {
+            color: #27bba9;
+        }
+
+        .attendees-list {
+            background: var(--color-feature-hover);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .attendee-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--color-feature-bg);
+            transition: background 0.2s ease;
+        }
+
+        .attendee-item:last-child {
+            border-bottom: none;
+        }
+
+        .attendee-item:hover {
+            background: var(--color-feature-bg);
+        }
+
+        .attendee-details {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .attendee-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #27bba9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .attendee-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .attendee-name {
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .attendee-email {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .attendee-time {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .no-attendees {
+            text-align: center;
+            padding: 2rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+
+        .status-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+            text-align: center;
+        }
+
+        .status-message.success {
+            display: block;
+            background: rgba(39, 187, 169, 0.1);
+            color: #27bba9;
+        }
+
+        .status-message.error {
+            display: block;
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .status-message.info {
+            display: block;
+            background: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+        }
+
+        .export-btn {
+            font-size: 0.9rem;
+            padding: 0.7rem 1rem;
+        }
+        
+        .export-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #27bba9;
+            border: 1px solid #27bba9;
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-outline:hover {
+            background: rgba(39, 187, 169, 0.1);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .session-details-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .session-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .session-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-primary, .btn-secondary, .btn-danger {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .attendees-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .export-btn {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Sidebar -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="session-details-container">
+            <a href="session-history.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Session History
+            </a>
+            
+            <h2>
+                <i class="fas fa-info-circle"></i>
+                Session Details
+            </h2>
+            
+            <div class="session-info-card">
+                <div class="session-header">
+                    <div class="session-title">
+                        <span class="session-code" id="session-code">Loading...</span>
+                        <span class="session-status" id="session-status">...</span>
+                    </div>
+                    
+                    <div class="session-actions">
+                        <button class="btn-danger" id="end-session">
+                            <i class="fas fa-stop-circle"></i>
+                            End Session
+                        </button>
+                        
+                        <button class="btn-secondary" id="export-pdf">
+                            <i class="fas fa-file-pdf"></i>
+                            Export to PDF
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="session-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Created By</span>
+                        <span class="meta-value" id="created-by">Loading...</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">Created On</span>
+                        <span class="meta-value" id="created-time">Loading...</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">Duration</span>
+                        <span class="meta-value" id="session-duration">Loading...</span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">Ended On</span>
+                        <span class="meta-value" id="ended-time">Not ended</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="attendees-section">
+                <div class="attendees-header">
+                    <h3 class="attendee-count">
+                        <i class="fas fa-users"></i>
+                        <span id="attendee-count">0</span> Attendees
+                    </h3>
+                    
+                    <div class="export-actions">
+                        <button class="btn-outline export-btn" id="export-excel">
+                            <i class="fas fa-file-excel"></i>
+                            Export to Excel
+                        </button>
+                        
+                        <button class="btn-secondary export-btn" id="export-csv">
+                            <i class="fas fa-file-csv"></i>
+                            Export to CSV
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="attendees-list" id="attendees-list">
+                    <!-- Attendees will be listed here -->
+                    <div class="no-attendees" id="no-attendees">
+                        <i class="fas fa-info-circle"></i> No attendees have registered for this session yet.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Status Messages -->
+            <div id="status-message" class="status-message"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Attendee Template -->
+    <template id="attendee-template">
+        <div class="attendee-item">
+            <div class="attendee-details">
+                <div class="attendee-avatar"></div>
+                <div class="attendee-info">
+                    <div class="attendee-name"></div>
+                    <div class="attendee-email"></div>
+                </div>
+            </div>
+            <div class="attendee-time"></div>
+        </div>
+    </template>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/session-details.js"></script>
+</body>
+</html> 

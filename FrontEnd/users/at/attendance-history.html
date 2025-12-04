@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance History - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Sidebar -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="attendance-history-container">
+            <h2><i class="fas fa-history"></i> Your Attendance History</h2>
+            
+            <div class="filter-tools">
+                <div class="filter-group">
+                    <label class="filter-label" for="date-filter">Date Range</label>
+                    <select id="date-filter">
+                        <option value="all">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="semester">Current Semester</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label" for="search-filter">Search</label>
+                    <input type="text" id="search-filter" placeholder="Search by session code or location...">
+                </div>
+            </div>
+            
+            <!-- Attendance Stats -->
+            <!--<div class="attendance-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-sessions">0</div>
+                    <div class="stat-label">Total Sessions</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value" id="attended-sessions">0</div>
+                    <div class="stat-label">Attended Sessions</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value" id="attendance-rate">0%</div>
+                    <div class="stat-label">Attendance Rate</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value" id="recent-sessions">0</div>
+                    <div class="stat-label">Recent Sessions</div>
+                </div>
+            </div>-->
+            
+            <div class="sessions-header">
+                <h3><i class="fas fa-list"></i> Attendance Records</h3>
+                <div class="export-btns">
+                    <div class="export-dropdown">
+                        <button id="export-excel" class="export-btn excel-btn">
+                            <i class="fas fa-file-excel"></i>
+                            Export to Excel
+                            <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="export-dropdown-content">
+                            <a href="#" data-chart-type="bar"><i class="fas fa-chart-bar"></i> Bar Chart</a>
+                            <a href="#" data-chart-type="pie"><i class="fas fa-chart-pie"></i> Pie Chart</a>
+                            <a href="#" data-chart-type="line"><i class="fas fa-chart-line"></i> Line Chart</a>
+                            <a href="#" data-chart-type="none"><i class="fas fa-table"></i> Data Only</a>
+                        </div>
+                    </div>
+                    <button id="export-csv" class="export-btn csv-btn">
+                        <i class="fas fa-file-csv"></i>
+                        Export to CSV
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Attendance Records Table -->
+            <div class="attendance-table-container">
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>Session Code</th>
+                            <th>Date & Time</th>
+                            <th>Location</th>
+                            <th>Creator</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendance-records">
+                        <!-- Attendance records will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Empty State Message -->
+            <div id="empty-message" class="empty-message">
+                <i class="fas fa-info-circle"></i> No attendance records found. Check back after attending some sessions.
+            </div>
+            
+            <!-- Pagination -->
+            <div id="pagination" class="pagination">
+                <!-- Pagination controls will be generated dynamically -->
+            </div>
+            
+            <!-- Status Message -->
+            <div id="status-message" class="status-message"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/attendance-history.js"></script>
+</body>
+</html> 

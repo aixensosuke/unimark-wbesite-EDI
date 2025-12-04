@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendee Dashboard - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Slider -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="dashboard-container">
+            <!-- Action Buttons and Stats Container -->
+            <div class="dashboard-left">
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                    <a href="attendance-verify.html" class="action-btn">
+                    <i class="fas fa-map-marker-alt"></i>
+                        <div class="btn-text">
+                    <h3>Mark Attendance</h3>
+                    <p>Check in for your current session</p>
+                        </div>
+                    </a>
+                    <a href="attendance-history.html" class="action-btn">
+                        <i class="fas fa-history"></i>
+                        <div class="btn-text">
+                    <h3>View Attendance Records</h3>
+                    <p>Check your attendance history</p>
+                        </div>
+                </a>
+                    <a href="virtual-id-card.html" class="action-btn">
+                        <i class="far fa-address-card"></i>
+                        <div class="btn-text">
+                    <h3>Virtual ID Card</h3>
+                    <p>View your virtual ID Card</p>
+                        </div>
+                </a>
+                    <a href="notes-selection.html" class="action-btn">
+                        <i class="fas fa-book-reader"></i>
+                        <div class="btn-text">
+                    <h3>Notes</h3>
+                    <p>View Notes</p>
+                        </div>
+                </a>
+            </div>
+
+                <hr class="divider">
+
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Attendance Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">42</div>
+                    <div class="stat-label">Classes Attended</div>
+                </div>
+                    <div class="stat-card">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Total Classes</div>
+                    </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Absences</div>
+                </div>
+            </div>
+
+            <!-- Attendance Calendar -->
+                <div class="attendance-chart">
+                    <h2>Overview This Week: </h2>
+                    <canvas id="bar-chart" width="25" height="12.5"></canvas>
+                </div>
+            </div>
+
+            <!-- Calendar Container -->
+            <div class="dashboard-right">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <h2>Calendar</h2>
+                        <div class="calendar-nav">
+                            <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                            <span id="currentMonth">January 2025</span>
+                            <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="calendar-body">
+                        <div class="calendar-weekdays">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+                        <div class="calendar-days" id="calendarDays">
+                            <!-- Days will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Schedule -->
+                <div class="schedule-block">
+                    <h3>Today's Schedule</h3>
+                    <div class="schedule-list">
+                        <div class="schedule-item">
+                            <div class="schedule-time">09:00 AM</div>
+                            <div class="schedule-details">
+                                <h4>Data Structures</h4>
+                                <p>Room 301</p>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="schedule-time">11:00 AM</div>
+                            <div class="schedule-details">
+                                <h4>Computer Networks</h4>
+                                <p>Lab 204</p>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="schedule-time">02:00 PM</div>
+                            <div class="schedule-details">
+                                <h4>Operating Systems</h4>
+                                <p>Room 405</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script type="module" src="../../js/firebase-auth.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/at-chart.js"></script>
+</body>
+</html> 

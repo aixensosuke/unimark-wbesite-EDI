@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual ID Card - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link rel="stylesheet" href="../../css/virtual-id-card.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <!-- JsBarcode for barcode generation -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <!-- html2canvas and jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Slider -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="id-card-container">
+            <div class="page-header">
+                <h1>Virtual ID Card</h1>
+                <div class="action-buttons">
+                    <button id="downloadPdf" class="btn primary-btn">
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                    <button id="printCard" class="btn secondary-btn">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                    <a href="at-dashboard.html" class="btn tertiary-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <div class="id-card-wrapper">
+                <!-- Loading State -->
+                <div id="loadingState" class="loading-container">
+                    <div class="spinner"></div>
+                    <p>Loading your ID card...</p>
+                </div>
+
+                <!-- Error State -->
+                <div id="errorState" class="error-container" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Unable to load ID card</h3>
+                    <p id="errorMessage">Please try again later or contact support.</p>
+                    <button id="retryButton" class="btn primary-btn">Retry</button>
+                </div>
+
+                <!-- ID Card -->
+                <div id="idCard" class="id-card" style="display: none;">
+                    <div class="id-card-header">
+                        <h2 id="collegeName">College Name</h2>
+                    </div>
+                    
+                    <div class="id-card-body">
+                        <div class="photo-container">
+                            <img id="studentPhoto" src="#" alt="Student Photo" onerror="this.onerror=null; this.src='../../assets/images/logo.png'; this.style.backgroundColor='#f0f0f0';">
+                        </div>
+                        
+                        <div class="student-info">
+                            <h3 id="studentName">Student Name</h3>
+                            <p id="studentBranch">Branch/Department</p>
+                            <div class="info-row">
+                                <span class="info-label">PRN/ID:</span>
+                                <span id="studentId">12345678</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Valid:</span>
+                                <span id="validityPeriod">20XX-20XX</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="id-card-footer">
+                        <svg id="barcode"></svg>
+                        <p class="watermark" id="watermarkText"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script type="module" src="../../js/firebase-auth.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/virtual-id-card.js"></script>
+</body>
+</html>

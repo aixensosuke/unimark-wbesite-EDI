@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - UniMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <!-- Page Transition Animation -->
+  <div class="page-transition">
+    <div class="transition-slide slide-1"></div>
+    <div class="transition-slide slide-2"></div>
+  </div>
+
+  <!-- Custom Cursor -->
+  <div class="cursor"></div>
+
+  <div id="header"></div>
+  
+  <main>
+    <!-- Contact Hero Section -->
+    <section class="about-hero">
+      <div class="about-hero-content">
+        <h1>Get in Touch</h1>
+        <p>Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+      </div>
+      <div class="scroll-indicator">
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="about-section">
+      <div class="container">
+        <div class="about-grid">
+          <div class="contact-form">
+            <h2>Send Us a Message</h2>
+            <form id="contactForm">
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <div class="glowing-input-container">
+                  <input type="text" id="name" name="name" required class="glowing-input" placeholder="Enter your full name">
+                  <div class="glowing-input-border"></div>
+                  <div class="glowing-input-glow"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="glowing-input-container">
+                  <input type="email" id="email" name="email" required class="glowing-input" placeholder="Enter your email">
+                  <div class="glowing-input-border"></div>
+                  <div class="glowing-input-glow"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="subject">Subject</label>
+                <div class="glowing-input-container">
+                  <input type="text" id="subject" name="subject" required class="glowing-input" placeholder="What is this about?">
+                  <div class="glowing-input-border"></div>
+                  <div class="glowing-input-glow"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <div class="glowing-input-container">
+                  <textarea id="message" name="message" required class="glowing-input" placeholder="Your message here..." rows="5"></textarea>
+                  <div class="glowing-input-border"></div>
+                  <div class="glowing-input-glow"></div>
+                </div>
+              </div>
+              <button type="submit" class="btn">Send Message</button>
+            </form>
+          </div>
+          <div class="contact-info-container">
+            <div class="contact-info-card">
+              <div class="contact-info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Our Location</h3>
+                <p>123 Education Street<br>City, State, ZIP</p>
+              </div>
+              <div class="contact-info-item">
+                <i class="fas fa-envelope"></i>
+                <h3>Email Us</h3>
+                <p>info@unimark.com<br>support@unimark.com</p>
+              </div>
+              <div class="contact-info-item">
+                <i class="fas fa-phone"></i>
+                <h3>Call Us</h3>
+                <p>+1 (123) 456-7890<br>+1 (123) 456-7891</p>
+              </div>
+              <div class="contact-info-item">
+                <i class="fas fa-clock"></i>
+                <h3>Working Hours</h3>
+                <p>Monday - Friday<br>9:00 AM - 6:00 PM</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="about-section">
+      <div class="container">
+        <div class="map-container">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.305935303!2d-74.25986548248684!3d40.69714941932609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1561060983193!5m2!1sen!2s"
+            width="100%"
+            height="450"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Intersection Observer for animations
+    const observerOptions =
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) =>
+    {
+      entries.forEach(entry =>
+      {
+        if (entry.isIntersecting)
+        {
+          entry.target.classList.add('animate');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all contact sections
+    document.querySelectorAll('.contact-form, .contact-info-container').forEach(element =>
+    {
+      observer.observe(element);
+    });
+
+    // Handle form submission
+    document.getElementById('contactForm').addEventListener('submit', (e) =>
+    {
+      e.preventDefault();
+      // Add your form submission logic here
+      alert('Thank you for your message! We will get back to you soon.');
+    });
+  </script>
+</body>
+</html>
+

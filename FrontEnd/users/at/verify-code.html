@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Session Code - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Page-specific styles */
+        .verify-code-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--color-feature-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .verify-code-container h2 {
+            color: var(--color-text);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .verify-code-container h2 i {
+            color: #27bba9;
+        }
+
+        .code-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: var(--color-text);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            padding: 1rem;
+            border: 1px solid var(--color-feature-hover);
+            border-radius: 8px;
+            background: var(--color-feature-bg);
+            color: var(--color-text);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #27bba9;
+            box-shadow: 0 0 0 2px rgba(39, 187, 169, 0.2);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #27bba9;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #229e8f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 187, 169, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--color-feature-hover);
+            color: var(--color-text);
+            border: 1px solid var(--color-feature-hover);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-feature-bg);
+            transform: translateY(-2px);
+        }
+
+        .status-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status-message.success {
+            display: block;
+            background: rgba(39, 187, 169, 0.1);
+            color: #27bba9;
+        }
+
+        .status-message.error {
+            display: block;
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .verify-code-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Sidebar -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="verify-code-container">
+            <h2><i class="fas fa-key"></i>Enter Session Code</h2>
+            
+            <div class="code-form">
+                <div class="form-group">
+                    <label for="session-code">Session Code</label>
+                    <input type="text" id="session-code" placeholder="Enter 6-digit code" maxlength="6" pattern="[0-9]{6}">
+                </div>
+
+                <div class="form-actions">
+                    <button id="verify-code" class="btn-primary">
+                        <i class="fas fa-check"></i>
+                        Verify Code
+                    </button>
+                    <a href="attendance-verify.html" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </a>
+                </div>
+            </div>
+
+            <div id="status-message" class="status-message"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/verify-code.js"></script>
+</body>
+</html> 

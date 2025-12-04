@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session History - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Page-specific styles */
+        .session-history-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--color-feature-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .session-history-container h2 {
+            color: var(--color-text);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .session-history-container h2 i {
+            color: #27bba9;
+        }
+
+        .sessions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .create-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .create-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sessions-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .session-card {
+            background: var(--color-feature-hover);
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .session-header h4 {
+            color: var(--color-text);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .session-code {
+            color: #27bba9;
+            font-weight: 600;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .session-status {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .session-status.active {
+            background: rgba(39, 187, 169, 0.1);
+            color: #27bba9;
+        }
+
+        .session-status.expired,
+        .session-status.ended {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .session-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .session-details p {
+            color: var(--color-text-muted);
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .session-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #27bba9;
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #229e8f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 187, 169, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--color-feature-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-feature-hover);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-feature-hover);
+            transform: translateY(-2px);
+        }
+
+        .status-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+            text-align: center;
+        }
+
+        .status-message.success {
+            display: block;
+            background: rgba(39, 187, 169, 0.1);
+            color: #27bba9;
+        }
+
+        .status-message.error {
+            display: block;
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .status-message.info {
+            display: block;
+            background: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+        }
+
+        .filter-tools {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tools select, .filter-tools input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--color-feature-hover);
+            border-radius: 8px;
+            background: var(--color-feature-bg);
+            color: var(--color-text);
+            font-size: 0.9rem;
+        }
+
+        .filter-tools select:focus, .filter-tools input:focus {
+            outline: none;
+            border-color: #27bba9;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .empty-sessions {
+            text-align: center;
+            padding: 3rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .session-history-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .sessions-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .filter-tools {
+                flex-direction: column;
+            }
+
+            .session-actions {
+                flex-direction: column;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Sidebar -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="session-history-container">
+            <h2><i class="fas fa-history"></i>Session History</h2>
+            
+            <div class="filter-tools">
+                <div class="filter-group">
+                    <label class="filter-label" for="status-filter">Status</label>
+                    <select id="status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="ended">Ended</option>
+                        <option value="expired">Expired</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label" for="date-filter">Date</label>
+                    <input type="date" id="date-filter">
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label" for="search-filter">Search Code</label>
+                    <input type="text" id="search-filter" placeholder="Enter session code">
+                </div>
+            </div>
+            
+            <div class="sessions-header">
+                <h3><i class="fas fa-list"></i>All Sessions</h3>
+                <a href="session-create.html" class="btn-secondary create-btn">
+                    <i class="fas fa-plus"></i>
+                    Create New Session
+                </a>
+            </div>
+            
+            <div id="sessions-list" class="sessions-list">
+                <!-- Sessions will be populated here -->
+                <div class="empty-sessions" id="empty-sessions">
+                    <i class="fas fa-info-circle"></i> No sessions found. Start by creating a new session.
+                </div>
+            </div>
+
+            <!-- Status Messages -->
+            <div id="status-message" class="status-message"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Session Card Template -->
+    <template id="session-card-template">
+        <div class="session-card">
+            <div class="session-header">
+                <h4>Session Code: <span class="session-code"></span></h4>
+                <span class="session-status"></span>
+            </div>
+            <div class="session-details">
+                <p><i class="fas fa-clock"></i> Duration: <span class="session-duration"></span> seconds</p>
+                <p><i class="fas fa-calendar"></i> Created: <span class="session-created"></span></p>
+                <p><i class="fas fa-hourglass-end"></i> Ended: <span class="session-ended"></span></p>
+                <p><i class="fas fa-users"></i> Attendees: <span class="session-attendees"></span></p>
+            </div>
+            <div class="session-actions">
+                <button class="btn-primary view-details">
+                    <i class="fas fa-eye"></i>
+                    View Details
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/session-history.js"></script>
+</body>
+</html> 

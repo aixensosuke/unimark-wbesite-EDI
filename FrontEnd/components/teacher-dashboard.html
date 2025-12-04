@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - UniMark</title>
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader"></div>
+        <p>Loading...</p>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar teacher-sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/images/logo.png" alt="UniMark" class="logo" onerror="this.style.display='none'">
+                <h2>UniMark</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="overview">
+                    <i class="fas fa-home"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item" data-section="create-session">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Create Session</span>
+                </a>
+                <a href="#" class="nav-item" data-section="sessions">
+                    <i class="fas fa-history"></i>
+                    <span>Session History</span>
+                </a>
+                <a href="#" class="nav-item" data-section="students">
+                    <i class="fas fa-users"></i>
+                    <span>Students</span>
+                </a>
+                <a href="#" class="nav-item" data-section="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="signout-btn" class="signout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Teacher Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <img id="user-avatar" src="../assets/images/default-avatar.png" alt="User" class="avatar">
+                        <span id="user-name">Teacher</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Overview Section -->
+                <section id="overview" class="content-section active">
+                    <div class="welcome-banner teacher-banner">
+                        <h2>Welcome, <span id="welcome-name">Professor</span>!</h2>
+                        <p>Manage your classes and track student attendance efficiently.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #9C27B0;">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="total-sessions">0</h3>
+                                <p>Total Sessions</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #2196F3;">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="total-attendance">0</h3>
+                                <p>Total Attendance</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #4CAF50;">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="avg-attendance">--%</h3>
+                                <p>Avg. Attendance Rate</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #FF9800;">
+                                <i class="fas fa-broadcast-tower"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="active-sessions">0</h3>
+                                <p>Active Sessions</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card quick-actions">
+                            <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                            <div class="quick-action-buttons">
+                                <button class="quick-btn" data-action="create-session">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span>New Session</span>
+                                </button>
+                                <button class="quick-btn" data-action="view-sessions">
+                                    <i class="fas fa-history"></i>
+                                    <span>View History</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card recent-sessions">
+                            <h3><i class="fas fa-clock"></i> Recent Sessions</h3>
+                            <div class="sessions-list" id="recent-sessions-list">
+                                <p class="no-data">No recent sessions</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Create Session Section -->
+                <section id="create-session" class="content-section">
+                    <h2>Create Attendance Session</h2>
+                    
+                    <!-- Create Form -->
+                    <div class="card create-session-card" id="create-session-form">
+                        <h3><i class="fas fa-plus-circle"></i> New Session</h3>
+                        <div class="session-form">
+                            <div class="form-group">
+                                <label>Class Name</label>
+                                <input type="text" id="session-class" placeholder="e.g., Mathematics 101" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Duration (minutes)</label>
+                                    <select id="session-duration">
+                                        <option value="5">5 minutes</option>
+                                        <option value="10" selected>10 minutes</option>
+                                        <option value="15">15 minutes</option>
+                                        <option value="30">30 minutes</option>
+                                        <option value="60">60 minutes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Radius (meters)</label>
+                                    <input type="number" id="session-radius" value="10" min="5" max="500">
+                                </div>
+                            </div>
+                            <button class="btn-primary btn-large" id="generate-code-btn">
+                                <i class="fas fa-qrcode"></i> Generate Attendance Code
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Session Display -->
+                    <div class="card active-session-card" id="active-session" style="display: none;">
+                        <h3><i class="fas fa-broadcast-tower"></i> Active Session</h3>
+                        <div class="session-info">
+                            <div class="code-display">
+                                <span class="code-label">Share this code with students</span>
+                                <div class="code-value" id="attendance-code">------</div>
+                                <button class="btn-secondary" id="copy-code-btn">
+                                    <i class="fas fa-copy"></i> Copy Code
+                                </button>
+                            </div>
+                            <div class="session-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-book"></i>
+                                    <span id="session-class-display">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Expires in: <strong id="session-timer">--:--</strong></span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Radius: <strong id="session-radius-display">10m</strong></span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>Marked: <strong id="marked-count">0</strong> students</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="session-actions">
+                            <button class="btn-secondary" id="refresh-location-btn">
+                                <i class="fas fa-sync"></i> Update Location
+                            </button>
+                            <button class="btn-danger" id="end-session-btn">
+                                <i class="fas fa-stop-circle"></i> End Session
+                            </button>
+                        </div>
+                        
+                        <!-- Marked Students -->
+                        <div class="marked-students-section">
+                            <h4><i class="fas fa-user-check"></i> Students Present</h4>
+                            <div class="marked-students-list" id="marked-students-list">
+                                <p class="no-data">Waiting for students...</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Session History Section -->
+                <section id="sessions" class="content-section">
+                    <h2>Session History</h2>
+                    <div class="card">
+                        <div class="filter-bar">
+                            <input type="text" id="search-sessions" placeholder="Search sessions..." class="search-input">
+                        </div>
+                        <div class="sessions-history-list" id="sessions-history-list">
+                            <p class="no-data">No sessions found</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Students Section -->
+                <section id="students" class="content-section">
+                    <h2>Student Records</h2>
+                    <div class="card">
+                        <div class="filter-bar">
+                            <input type="text" id="search-students" placeholder="Search students..." class="search-input">
+                        </div>
+                        <div class="table-container">
+                            <table class="students-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Email</th>
+                                        <th>Total Attendance</th>
+                                        <th>Last Seen</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-table-body">
+                                    <tr>
+                                        <td colspan="4" class="no-data">No student records found</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profile" class="content-section">
+                    <h2>My Profile</h2>
+                    <div class="card profile-card">
+                        <div class="profile-header">
+                            <img id="profile-avatar" src="../assets/images/default-avatar.png" alt="Profile" class="profile-avatar">
+                            <div class="profile-info">
+                                <h3 id="profile-name">-</h3>
+                                <p id="profile-email">-</p>
+                            </div>
+                        </div>
+                        <div class="profile-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Role</span>
+                                <span class="detail-value">Teacher</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Member Since</span>
+                                <span class="detail-value" id="profile-joined">-</span>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <button class="btn-secondary" id="change-role-btn">
+                                <i class="fas fa-exchange-alt"></i> Switch Role
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+        import { firebaseConfig, generateCode, formatDate, formatTime } from "../js/firebase-config.js";
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let activeSessionId = null;
+        let sessionTimer = null;
+        let sessionUnsubscribe = null;
+        let teacherLocation = null;
+        let sessionsHistory = [];
+
+        // LocalStorage keys
+        const TEACHER_SESSIONS_KEY = 'unimark-teacher-sessions';
+        const ACTIVE_SESSION_KEY = 'unimark-active-session';
+        const STUDENT_ATTENDANCE_KEY = 'unimark-attendance-records';
+
+        // Get sessions from localStorage
+        function getLocalSessions() {
+            try {
+                return JSON.parse(localStorage.getItem(TEACHER_SESSIONS_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        // Save session to localStorage
+        function saveLocalSession(session) {
+            const sessions = getLocalSessions();
+            const existingIndex = sessions.findIndex(s => s.code === session.code);
+            if (existingIndex >= 0) {
+                sessions[existingIndex] = session;
+            } else {
+                sessions.unshift(session);
+            }
+            if (sessions.length > 50) sessions.pop();
+            localStorage.setItem(TEACHER_SESSIONS_KEY, JSON.stringify(sessions));
+        }
+
+        // Save active session
+        function saveActiveSession(session) {
+            localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(session));
+        }
+
+        // Get active session
+        function getActiveSession() {
+            try {
+                return JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY));
+            } catch {
+                return null;
+            }
+        }
+
+        // Clear active session
+        function clearActiveSession() {
+            localStorage.removeItem(ACTIVE_SESSION_KEY);
+        }
+
+        // Get student attendance from localStorage (cross-check)
+        function getStudentAttendanceRecords() {
+            try {
+                return JSON.parse(localStorage.getItem(STUDENT_ATTENDANCE_KEY)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        // Get students who marked attendance for a specific session code
+        function getStudentsForSession(code) {
+            const records = getStudentAttendanceRecords();
+            return records.filter(r => r.sessionCode === code);
+        }
+
+        // Hide/Show loading
+        const hideLoading = () => {
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) overlay.style.display = 'none';
+        };
+        const showLoading = () => {
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) overlay.style.display = 'flex';
+        };
+
+        // Initialize dashboard
+        async function initDashboard(user) {
+            console.log('Initializing dashboard for:', user.email);
+            currentUser = user;
+            updateUserUI(user);
+            
+            try {
+                await loadUserData();
+            } catch (e) {
+                console.warn('Error loading user data:', e);
+            }
+            
+            try {
+                await loadSessionsHistory();
+            } catch (e) {
+                console.warn('Error loading sessions:', e);
+            }
+            
+            // Check for active session from localStorage
+            const savedActiveSession = getActiveSession();
+            if (savedActiveSession && savedActiveSession.teacherId === user.uid) {
+                const expiresAt = new Date(savedActiveSession.expiresAt);
+                if (expiresAt > new Date() && savedActiveSession.active) {
+                    activeSessionId = savedActiveSession.code;
+                    showActiveSession(
+                        savedActiveSession.code,
+                        savedActiveSession.classId,
+                        savedActiveSession.duration,
+                        savedActiveSession.radius,
+                        expiresAt
+                    );
+                    listenToSession(savedActiveSession.code);
+                } else {
+                    clearActiveSession();
+                }
+            }
+            
+            hideLoading();
+            console.log('Dashboard initialized');
+        }
+
+        // Update user UI
+        function updateUserUI(user) {
+            const displayName = user.displayName || 'Teacher';
+            const nameEl = document.getElementById('user-name');
+            const welcomeEl = document.getElementById('welcome-name');
+            const profileNameEl = document.getElementById('profile-name');
+            const profileEmailEl = document.getElementById('profile-email');
+            const avatarEl = document.getElementById('user-avatar');
+            const profileAvatarEl = document.getElementById('profile-avatar');
+            const profileJoinedEl = document.getElementById('profile-joined');
+            
+            if (nameEl) nameEl.textContent = displayName;
+            if (welcomeEl) welcomeEl.textContent = displayName.split(' ')[0];
+            if (profileNameEl) profileNameEl.textContent = displayName;
+            if (profileEmailEl) profileEmailEl.textContent = user.email;
+            
+            if (user.photoURL) {
+                if (avatarEl) avatarEl.src = user.photoURL;
+                if (profileAvatarEl) profileAvatarEl.src = user.photoURL;
+            }
+            
+            if (user.metadata?.creationTime && profileJoinedEl) {
+                profileJoinedEl.textContent = formatDate(user.metadata.creationTime);
+            }
+        }
+
+        // Load user data
+        async function loadUserData() {
+            const userRef = doc(db, 'users', currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            
+            if (!userSnap.exists()) {
+                await setDoc(userRef, {
+                    uid: currentUser.uid,
+                    name: currentUser.displayName,
+                    email: currentUser.email,
+                    photoURL: currentUser.photoURL,
+                    role: 'teacher',
+                    createdAt: new Date().toISOString()
+                });
+            }
+        }
+
+        // Load sessions history - simplified without orderBy to avoid index requirement
+        async function loadSessionsHistory() {
+            // Load from localStorage first (instant)
+            sessionsHistory = getLocalSessions().filter(s => s.teacherId === currentUser.uid);
+            
+            // Update UI immediately with local data
+            updateStats();
+            renderSessionsHistory();
+            renderRecentSessions();
+            loadStudents();
+
+            // Try to load from Firestore (may fail if no index)
+            try {
+                const sessionsRef = collection(db, 'attendance-sessions');
+                // Simple query without orderBy to avoid index requirement
+                const q = query(sessionsRef, where('teacherId', '==', currentUser.uid));
+                
+                const snapshot = await getDocs(q);
+                const firestoreSessions = [];
+                
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    let createdAt = data.createdAt;
+                    if (createdAt?.toDate) createdAt = createdAt.toDate();
+                    
+                    firestoreSessions.push({ 
+                        id: docSnap.id, 
+                        code: docSnap.id,
+                        ...data,
+                        createdAt: createdAt
+                    });
+                });
+
+                // Merge with local sessions
+                const mergedMap = new Map();
+                sessionsHistory.forEach(s => mergedMap.set(s.code, s));
+                firestoreSessions.forEach(s => mergedMap.set(s.code, s));
+                sessionsHistory = Array.from(mergedMap.values())
+                    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+                // Update UI with merged data
+                updateStats();
+                renderSessionsHistory();
+                renderRecentSessions();
+                loadStudents();
+                
+            } catch (firestoreError) {
+                console.warn('Firestore query failed (this is OK, using local data):', firestoreError.message);
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            let totalAttendance = 0;
+            let activeSessions = 0;
+            
+            sessionsHistory.forEach(session => {
+                totalAttendance += session.markedStudents?.length || 0;
+                if (session.active) activeSessions++;
+            });
+
+            const totalSessionsEl = document.getElementById('total-sessions');
+            const totalAttendanceEl = document.getElementById('total-attendance');
+            const activeSessionsEl = document.getElementById('active-sessions');
+            const avgAttendanceEl = document.getElementById('avg-attendance');
+            
+            if (totalSessionsEl) totalSessionsEl.textContent = sessionsHistory.length;
+            if (totalAttendanceEl) totalAttendanceEl.textContent = totalAttendance;
+            if (activeSessionsEl) activeSessionsEl.textContent = activeSessions;
+            
+            const avgRate = sessionsHistory.length > 0 
+                ? Math.round((totalAttendance / sessionsHistory.length) * 10) / 10 
+                : 0;
+            if (avgAttendanceEl) avgAttendanceEl.textContent = avgRate + ' avg';
+        }
+
+        // Render recent sessions
+        function renderRecentSessions() {
+            const container = document.getElementById('recent-sessions-list');
+            if (!container) return;
+            
+            const recent = sessionsHistory.slice(0, 5);
+            
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="no-data">No recent sessions</p>';
+                return;
+            }
+            
+            container.innerHTML = recent.map(session => `
+                <div class="session-item ${session.active ? 'active' : ''}">
+                    <div class="session-icon">
+                        <i class="fas fa-${session.active ? 'broadcast-tower' : 'clipboard-check'}"></i>
+                    </div>
+                    <div class="session-details">
+                        <h4>${session.classId || 'Unnamed Class'}</h4>
+                        <p>${session.markedStudents?.length || 0} students • ${formatDate(session.createdAt)}</p>
+                    </div>
+                    <span class="session-status ${session.active ? 'active' : 'ended'}">${session.active ? 'Active' : 'Ended'}</span>
+                </div>
+            `).join('');
+        }
+
+        // Render sessions history
+        function renderSessionsHistory(search = '') {
+            const container = document.getElementById('sessions-history-list');
+            if (!container) return;
+            
+            let filtered = sessionsHistory;
+            
+            if (search) {
+                const searchLower = search.toLowerCase();
+                filtered = filtered.filter(s => s.classId?.toLowerCase().includes(searchLower));
+            }
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<p class="no-data">No sessions found</p>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(session => `
+                <div class="session-history-item">
+                    <div class="session-history-header">
+                        <h4>${session.classId || 'Unnamed Class'}</h4>
+                        <span class="badge ${session.active ? 'success' : ''}">${session.active ? 'Active' : 'Ended'}</span>
+                    </div>
+                    <div class="session-history-details">
+                        <span><i class="fas fa-key"></i> Code: <strong>${session.code}</strong></span>
+                        <span><i class="fas fa-users"></i> ${session.markedStudents?.length || 0} students</span>
+                        <span><i class="fas fa-calendar"></i> ${formatDate(session.createdAt)}</span>
+                        <span><i class="fas fa-clock"></i> ${session.duration || 10} min</span>
+                    </div>
+                    ${session.markedStudents?.length > 0 ? `
+                        <div class="session-students-preview">
+                            <strong>Students:</strong>
+                            ${session.markedStudents.slice(0, 3).map(s => s.name).join(', ')}
+                            ${session.markedStudents.length > 3 ? ` +${session.markedStudents.length - 3} more` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Load students
+        function loadStudents() {
+            const studentsMap = new Map();
+            
+            sessionsHistory.forEach(session => {
+                session.markedStudents?.forEach(student => {
+                    const existing = studentsMap.get(student.id);
+                    if (existing) {
+                        existing.count++;
+                        if (new Date(student.markedAt) > new Date(existing.lastSeen)) {
+                            existing.lastSeen = student.markedAt;
+                        }
+                    } else {
+                        studentsMap.set(student.id, {
+                            ...student,
+                            count: 1,
+                            lastSeen: student.markedAt
+                        });
+                    }
+                });
+            });
+            
+            renderStudents(Array.from(studentsMap.values()));
+        }
+
+        // Render students - Fixed image handling
+        function renderStudents(students, search = '') {
+            const tbody = document.getElementById('students-table-body');
+            if (!tbody) return;
+            
+            let filtered = students;
+            if (search) {
+                const searchLower = search.toLowerCase();
+                filtered = filtered.filter(s => 
+                    s.name?.toLowerCase().includes(searchLower) ||
+                    s.email?.toLowerCase().includes(searchLower)
+                );
+            }
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="no-data">No students found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = filtered.map(student => {
+                const imgSrc = student.photoURL || '';
+                const hasPhoto = imgSrc && imgSrc.length > 0;
+                return `
+                    <tr>
+                        <td>
+                            <div class="student-cell">
+                                ${hasPhoto 
+                                    ? `<img src="${imgSrc}" alt="${student.name || 'Student'}" onload="this.style.opacity=1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="opacity:0; transition: opacity 0.2s;"><div class="avatar-placeholder-small" style="display:none;"><i class="fas fa-user"></i></div>`
+                                    : `<div class="avatar-placeholder-small"><i class="fas fa-user"></i></div>`
+                                }
+                                <span>${student.name || 'Unknown'}</span>
+                            </div>
+                        </td>
+                        <td>${student.email || '-'}</td>
+                        <td><span class="badge success">${student.count} times</span></td>
+                        <td>${formatDate(student.lastSeen)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Create session - NO LOCATION REQUIRED, ignores Firestore errors
+        async function createSession() {
+            const classNameEl = document.getElementById('session-class');
+            const durationEl = document.getElementById('session-duration');
+            const radiusEl = document.getElementById('session-radius');
+            
+            const className = classNameEl?.value?.trim();
+            const duration = parseInt(durationEl?.value) || 10;
+            const radius = parseInt(radiusEl?.value) || 10;
+
+            if (!className) {
+                alert('Please enter a class name');
+                return;
+            }
+
+            const btn = document.getElementById('generate-code-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating session...';
+            }
+
+            try {
+                const code = generateCode();
+                const now = new Date();
+                const expiresAt = new Date(now.getTime() + duration * 60 * 1000);
+
+                teacherLocation = { latitude: 0, longitude: 0, accuracy: 0 };
+
+                const sessionData = {
+                    code: code,
+                    classId: className,
+                    teacherId: currentUser.uid,
+                    teacherName: currentUser.displayName || 'Teacher',
+                    teacherLocation: teacherLocation,
+                    radius: radius,
+                    duration: duration,
+                    createdAt: now.toISOString(),
+                    expiresAt: expiresAt.toISOString(),
+                    active: true,
+                    markedStudents: []
+                };
+
+                // Save to localStorage first (always works)
+                saveLocalSession(sessionData);
+                saveActiveSession(sessionData);
+                console.log('Session saved to localStorage:', code);
+
+                // Try to save to Firestore (ignore errors)
+                try {
+                    const sessionRef = doc(db, 'attendance-sessions', code);
+                    await setDoc(sessionRef, {
+                        ...sessionData,
+                        createdAt: serverTimestamp(),
+                        expiresAt: expiresAt
+                    });
+                    console.log('Session saved to Firestore:', code);
+                } catch (firestoreError) {
+                    console.warn('Firestore save failed (ignoring, session saved locally):', firestoreError.message);
+                }
+
+                activeSessionId = code;
+                showActiveSession(code, className, duration, radius, expiresAt);
+                listenToSession(code);
+
+            } catch (error) {
+                console.error('Error creating session:', error);
+                alert('Error creating session: ' + (error.message || 'Unknown error'));
+            }
+
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-qrcode"></i> Generate Attendance Code';
+            }
+        }
+
+        // Update marked students count and list from all sources
+        function updateSessionStudents(code) {
+            // Get from local session
+            const localSessions = getLocalSessions();
+            const localSession = localSessions.find(s => s.code === code);
+            const firestoreStudents = localSession?.markedStudents || [];
+            
+            // Get from student attendance records (cross-check)
+            const localStudentRecords = getStudentsForSession(code);
+            
+            // Merge both sources (remove duplicates by student ID)
+            const studentsMap = new Map();
+            
+            firestoreStudents.forEach(s => {
+                studentsMap.set(s.id, s);
+            });
+            
+            localStudentRecords.forEach(r => {
+                if (!studentsMap.has(r.studentId)) {
+                    studentsMap.set(r.studentId, {
+                        id: r.studentId,
+                        name: r.studentName,
+                        email: r.studentEmail,
+                        markedAt: r.markedAt,
+                        photoURL: null
+                    });
+                }
+            });
+            
+            const allStudents = Array.from(studentsMap.values());
+            
+            // Update count
+            const countEl = document.getElementById('marked-count');
+            if (countEl) countEl.textContent = allStudents.length;
+            
+            // Update list
+            updateMarkedStudentsList(allStudents);
+            
+            return allStudents;
+        }
+
+        // Update marked students list UI - Fixed image handling
+        function updateMarkedStudentsList(students) {
+            const listEl = document.getElementById('marked-students-list');
+            if (!listEl) return;
+            
+            if (!students || students.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <p>Waiting for students to mark attendance...</p>
+                        <span class="hint">Students will appear here as they enter the code</span>
+                    </div>
+                `;
+            } else {
+                listEl.innerHTML = `
+                    <div class="students-count-header">
+                        <span><i class="fas fa-user-check"></i> ${students.length} student${students.length !== 1 ? 's' : ''} marked present</span>
+                    </div>
+                    <div class="students-list-items">
+                        ${students.map((s, index) => {
+                            const imgSrc = s.photoURL || '';
+                            const hasPhoto = imgSrc && imgSrc.length > 0;
+                            return `
+                                <div class="marked-student-item" style="animation-delay: ${index * 0.1}s">
+                                    <div class="student-rank">${index + 1}</div>
+                                    ${hasPhoto 
+                                        ? `<img src="${imgSrc}" alt="${s.name || 'Student'}" onload="this.style.opacity=1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="opacity:0; transition: opacity 0.2s;"><div class="avatar-placeholder" style="display:none;"><i class="fas fa-user"></i></div>`
+                                        : `<div class="avatar-placeholder"><i class="fas fa-user"></i></div>`
+                                    }
+                                    <div class="student-details">
+                                        <h4>${s.name || 'Unknown Student'}</h4>
+                                        <p>${s.email || ''}</p>
+                                    </div>
+                                    <span class="mark-time">${formatTime(s.markedAt)}</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        // Show active session UI - updated
+        function showActiveSession(code, className, duration, radius, expiresAt) {
+            const createForm = document.getElementById('create-session-form');
+            const activeSession = document.getElementById('active-session');
+            const codeEl = document.getElementById('attendance-code');
+            const classDisplayEl = document.getElementById('session-class-display');
+            const radiusDisplayEl = document.getElementById('session-radius-display');
+            
+            if (createForm) createForm.style.display = 'none';
+            if (activeSession) activeSession.style.display = 'block';
+            if (codeEl) codeEl.textContent = code;
+            if (classDisplayEl) classDisplayEl.textContent = className;
+            if (radiusDisplayEl) radiusDisplayEl.textContent = radius + 'm';
+            
+            // Initial student count
+            updateSessionStudents(code);
+            
+            startSessionTimer(expiresAt);
+        }
+
+        // Start timer
+        function startSessionTimer(expiresAt) {
+            if (sessionTimer) clearInterval(sessionTimer);
+            
+            const expireDate = expiresAt instanceof Date ? expiresAt : new Date(expiresAt);
+            
+            const timerEl = document.getElementById('session-timer');
+            
+            sessionTimer = setInterval(() => {
+                const now = new Date();
+                const diff = expireDate - now;
+                
+                if (diff <= 0) {
+                    endSession();
+                    return;
+                }
+                
+                const minutes = Math.floor(diff / 60000);
+                const seconds = Math.floor((diff % 60000) / 1000);
+                if (timerEl) {
+                    timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+
+        // Listen to session updates
+        function listenToSession(code) {
+            // Initial update from localStorage
+            updateSessionStudents(code);
+            
+            // Set up periodic check for localStorage changes (every 3 seconds)
+            const localCheckInterval = setInterval(() => {
+                if (activeSessionId === code) {
+                    updateSessionStudents(code);
+                } else {
+                    clearInterval(localCheckInterval);
+                }
+            }, 3000);
+
+            // Try Firestore listener
+            try {
+                const sessionRef = doc(db, 'attendance-sessions', code);
+                sessionUnsubscribe = onSnapshot(sessionRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        const students = data.markedStudents || [];
+                        
+                        // Update local session with Firestore data
+                        const localSessions = getLocalSessions();
+                        const sessionIndex = localSessions.findIndex(s => s.code === code);
+                        if (sessionIndex >= 0) {
+                            localSessions[sessionIndex].markedStudents = students;
+                            localStorage.setItem(TEACHER_SESSIONS_KEY, JSON.stringify(localSessions));
+                        }
+                        
+                        // Update display with merged data
+                        updateSessionStudents(code);
+                    }
+                }, (error) => {
+                    console.warn('Firestore listener error (using localStorage):', error.message);
+                });
+            } catch (error) {
+                console.warn('Could not setup Firestore listener:', error.message);
+            }
+        }
+
+        // End session
+        async function endSession() {
+            if (sessionTimer) clearInterval(sessionTimer);
+            if (sessionUnsubscribe) sessionUnsubscribe();
+            
+            if (activeSessionId) {
+                // Update local session
+                const localSessions = getLocalSessions();
+                const sessionIndex = localSessions.findIndex(s => s.code === activeSessionId);
+                if (sessionIndex >= 0) {
+                    localSessions[sessionIndex].active = false;
+                    localStorage.setItem(TEACHER_SESSIONS_KEY, JSON.stringify(localSessions));
+                }
+
+                // Try to update Firestore
+                try {
+                    const sessionRef = doc(db, 'attendance-sessions', activeSessionId);
+                    await updateDoc(sessionRef, { active: false });
+                } catch (error) {
+                    console.warn('Could not update Firestore:', error.message);
+                }
+            }
+            
+            activeSessionId = null;
+            clearActiveSession();
+            
+            const activeSessionEl = document.getElementById('active-session');
+            const createFormEl = document.getElementById('create-session-form');
+            const classInputEl = document.getElementById('session-class');
+            
+            if (activeSessionEl) activeSessionEl.style.display = 'none';
+            if (createFormEl) createFormEl.style.display = 'block';
+            if (classInputEl) classInputEl.value = '';
+            
+            await loadSessionsHistory();
+        }
+
+        // Auth state
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                initDashboard(user);
+            } else {
+                window.location.href = '../index.html';
+            }
+        });
+
+        // Event Listeners - wait for DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('signout-btn')?.addEventListener('click', async () => {
+                if (activeSessionId) await endSession();
+                await signOut(auth);
+                localStorage.removeItem('unimark-role');
+                window.location.href = '../index.html';
+            });
+
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = item.dataset.section;
+                    
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+                    document.getElementById(section)?.classList.add('active');
+                    
+                    document.querySelector('.sidebar')?.classList.remove('open');
+                });
+            });
+
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const action = btn.dataset.action;
+                    if (action === 'create-session') {
+                        document.querySelector('[data-section="create-session"]')?.click();
+                    } else if (action === 'view-sessions') {
+                        document.querySelector('[data-section="sessions"]')?.click();
+                    }
+                });
+            });
+
+            document.querySelector('.menu-toggle')?.addEventListener('click', () => {
+                document.querySelector('.sidebar')?.classList.toggle('open');
+            });
+
+            document.getElementById('generate-code-btn')?.addEventListener('click', createSession);
+
+            document.getElementById('copy-code-btn')?.addEventListener('click', () => {
+                const code = document.getElementById('attendance-code')?.textContent;
+                if (code) {
+                    navigator.clipboard.writeText(code).then(() => {
+                        const btn = document.getElementById('copy-code-btn');
+                        if (btn) {
+                            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                            setTimeout(() => {
+                                btn.innerHTML = '<i class="fas fa-copy"></i> Copy Code';
+                            }, 2000);
+                        }
+                    });
+                }
+            });
+
+            document.getElementById('refresh-location-btn')?.addEventListener('click', () => {
+                alert('Location tracking is optional and disabled for now.');
+            });
+
+            document.getElementById('end-session-btn')?.addEventListener('click', endSession);
+
+            document.getElementById('search-sessions')?.addEventListener('input', (e) => {
+                renderSessionsHistory(e.target.value);
+            });
+
+            document.getElementById('search-students')?.addEventListener('input', (e) => {
+                const studentsMap = new Map();
+                sessionsHistory.forEach(session => {
+                    session.markedStudents?.forEach(student => {
+                        const existing = studentsMap.get(student.id);
+                        if (existing) {
+                            existing.count++;
+                        } else {
+                            studentsMap.set(student.id, { ...student, count: 1, lastSeen: student.markedAt });
+                        }
+                    });
+                });
+                renderStudents(Array.from(studentsMap.values()), e.target.value);
+            });
+
+            document.getElementById('change-role-btn')?.addEventListener('click', () => {
+                localStorage.removeItem('unimark-role');
+                window.location.href = '../index.html';
+            });
+        });
+    </script>
+</body>
+</html>

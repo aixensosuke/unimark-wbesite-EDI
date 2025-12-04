@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisor Dashboard - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <div class="cursor"></div>
+
+    <div id="header"></div>
+
+    <div id="slider"></div>
+
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="dashboard-container">
+            <div class="dashboard-left">
+                
+                <div class="action-buttons">
+                    <a href="session-create.html" class="action-btn" style="background-color: var(--color-feature-bg); height: 125px; margin-left: 190px;">
+                        <i class="fas fa-plus"></i>
+                        <div class="btn-text">
+                            <h3>New Session</h3>
+                            <p>Create a new session</p>
+                        </div>
+                    </a>
+                </div>
+
+                <hr class="divider">
+
+                <div class="action-buttons">
+                    <a href="attendance-records.html" class="action-btn">
+                        <i class="fas fa-clipboard-check"></i>
+                        <div class="btn-text">
+                            <h3>Attendance Records</h3>
+                            <p>View Attendee Records</p>
+                        </div>
+                    </a>
+                    <a href="session-history.html" class="action-btn">
+                        <i class="fas fa-history"></i>
+                        <div class="btn-text">
+                            <h3>Session History</h3>
+                            <p>View Recent Sessions</p>
+                        </div>
+                    </a>
+                    <a href="sup-classes.html" class="action-btn">
+                        <i class="fas fa-users"></i>
+                        <div class="btn-text">
+                            <h3>Classes</h3>
+                            <p>View Classes Info</p>
+                        </div>
+                    </a>
+                    <a href="sup-assignments.html" class="action-btn">
+                        <i class="fas fa-tasks"></i>
+                        <div class="btn-text">
+                            <h3>Assignments</h3>
+                            <p>View or Post Assignments</p>
+                        </div>
+                    </a>
+                </div>
+
+                <hr class="divider">
+
+                <div class="alerts-section">
+                    <h3><i class="fas fa-exclamation-circle"></i> Alerts</h3>
+                    <div class="alerts-grid">
+                        <div class="alert-card urgent">
+                            <div class="alert-title">Low Attendance in CS301</div>
+                            <div class="alert-time">Today, 10:30 AM</div>
+                            <p>Attendance rate dropped below 70% in Data Structures class.</p>
+                        </div>
+                        <div class="alert-card">
+                            <div class="alert-title">Session Reminder</div>
+                            <div class="alert-time">Today, 8:45 AM</div>
+                            <p>You have a Computer Networks session at 11:00 AM in Lab 204.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="divider">
+                
+                <div class="schedule-block">
+                    <h3><i class="fas fa-history"></i> Recent Sessions</h3>
+                    <div class="schedule-list">
+                        <div class="schedule-item">
+                            <div class="schedule-time">Yesterday</div>
+                            <div class="schedule-details">
+                                <h4>Operating Systems</h4>
+                                <p>Attendance: 42/50 students (84%)</p>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="schedule-time">Mon, Feb 12</div>
+                            <div class="schedule-details">
+                                <h4>Data Structures</h4>
+                                <p>Attendance: 38/50 students (76%)</p>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="schedule-time">Mon, Feb 12</div>
+                            <div class="schedule-details">
+                                <h4>Computer Networks</h4>
+                                <p>Attendance: 45/50 students (90%)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-right">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <h2>Calendar</h2>
+                        <div class="calendar-nav">
+                            <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                            <span id="currentMonth">January 2024</span>
+                            <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="calendar-body">
+                        <div class="calendar-weekdays">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+                        <div class="calendar-days" id="calendarDays">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="schedule-block">
+                    <h3><i class="fas fa-calendar-alt"></i> Today's Schedule</h3>
+                    <div class="schedule-list">
+                        <div class="schedule-item">
+                            <div class="schedule-time">09:00 AM</div>
+                            <div class="schedule-details">
+                                <h4>Data Structures</h4>
+                                <p>Room 301</p>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="schedule-time">11:00 AM</div>
+                            <div class="schedule-details">
+                                <h4>Computer Networks</h4>
+                                <p>Lab 204</p>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="schedule-time">02:00 PM</div>
+                            <div class="schedule-details">
+                                <h4>Operating Systems</h4>
+                                <p>Room 405</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

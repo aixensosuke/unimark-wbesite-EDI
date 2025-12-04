@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Supervisor - UniMark</title>
+    <link rel="icon" type="image/png" href="../../assets/images/logo.png">
+    <link rel="apple-touch-icon" href="../../assets/images/logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .supervisor-form-container {
+            max-width: 600px;
+            margin: 120px auto 40px;
+            padding: 2rem;
+            background: var(--color-feature-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            animation: fadeInUp 0.5s ease forwards;
+            border: 1px solid var(--color-border);
+        }
+
+        .supervisor-form-container h2 {
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-feature-bg);
+            color: var(--color-text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #27bba9;
+            box-shadow: 0 0 0 2px rgba(39, 187, 169, 0.2);
+        }
+
+        .form-group input::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            padding: 0;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--color-text);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #27bba9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .submit-btn:hover {
+            background: #229e8e;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .error-message {
+            color: var(--color-error);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            background: var(--color-error-bg);
+            border: 1px solid var(--color-error-border);
+        }
+
+        .success-message {
+            color: var(--color-success);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            background: var(--color-success-bg);
+            border: 1px solid var(--color-success-border);
+        }
+
+        /* Light mode styles */
+        [data-theme="light"] .supervisor-form-container {
+            background: #ffffff;
+        }
+
+        [data-theme="light"] .form-group input {
+            background: #ffffff;
+            color: #333333;
+        }
+
+        [data-theme="light"] .form-group input:focus {
+            background: #ffffff;
+        }
+
+        /* Dark mode styles */
+        [data-theme="dark"] .supervisor-form-container {
+            background: var(--color-feature-bg);
+        }
+
+        [data-theme="dark"] .form-group input {
+            background: var(--color-feature-bg);
+            color: var(--color-text);
+        }
+
+        [data-theme="dark"] .form-group input:focus {
+            background: var(--color-feature-hover);
+        }
+
+        @media screen and (max-width: 768px) {
+            .supervisor-form-container {
+                margin: 100px 1rem 40px;
+                padding: 1.5rem;
+            }
+
+            .supervisor-form-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .form-group label {
+                font-size: 0.9rem;
+            }
+
+            .form-group input {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Additional styles for read-only input */
+        .form-group input[readonly] {
+            background: var(--color-feature-hover);
+            cursor: not-allowed;
+        }
+
+        .form-group .id-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group .generate-id-btn {
+            padding: 0.8rem 1rem;
+            background: #27bba9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group .generate-id-btn:hover {
+            background: #229e8e;
+        }
+
+        /* Light mode styles for readonly input */
+        [data-theme="light"] .form-group input[readonly] {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Transition Animation -->
+    <div class="page-transition">
+        <div class="transition-slide slide-1"></div>
+        <div class="transition-slide slide-2"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Slider -->
+    <div id="slider"></div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <main>
+        <div class="supervisor-form-container">
+            <h2>Add New Supervisor</h2>
+            <form id="supervisorForm" onsubmit="return handleSubmit(event)">
+                <div class="form-group">
+                    <label for="supervisorName">Supervisor's Name</label>
+                    <input type="text" id="supervisorName" name="supervisorName" placeholder="Enter supervisor's full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email ID</label>
+                    <input type="email" id="email" name="email" placeholder="Enter supervisor's email address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="organizationId">Organization ID</label>
+                    <input type="text" id="organizationId" name="organizationId" placeholder="Enter organization ID" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="supervisorId">Supervisor ID</label>
+                    <div class="id-container">
+                        <input type="text" id="supervisorId" name="supervisorId" placeholder="Click generate to get ID" readonly required>
+                        <button type="button" class="generate-id-btn" onclick="generateSupervisorId()">
+                            <i class="fas fa-sync-alt"></i>
+                            Generate
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Create Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="password" name="password" placeholder="Enter password (min. 8 characters)" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('password')" aria-label="Toggle password visibility">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="password-input-container">
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')" aria-label="Toggle password visibility">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="error-message" id="errorMessage"></div>
+                <div class="success-message" id="successMessage"></div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-user-plus"></i>
+                    Add Supervisor
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script src="../../js/main.js"></script>
+    <script type="module">
+        // Get user data from session storage
+        const userData = JSON.parse(sessionStorage.getItem('userData'));
+        if (!userData) {
+            window.location.href = '../../components/login.html';
+        }
+
+        // Function to generate a unique 6-digit Supervisor ID
+        function generateSupervisorId() {
+            const min = 100000; // Minimum 6-digit number
+            const max = 999999; // Maximum 6-digit number
+            const newId = Math.floor(Math.random() * (max - min + 1)) + min;
+            document.getElementById('supervisorId').value = newId;
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const supervisorId = document.getElementById('supervisorId').value;
+
+            // Reset messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            // Validate Supervisor ID
+            if (!supervisorId || supervisorId.length !== 6 || isNaN(supervisorId)) {
+                errorMessage.textContent = 'Please generate a valid Supervisor ID';
+                errorMessage.style.display = 'block';
+                return false;
+            }
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match';
+                errorMessage.style.display = 'block';
+                return false;
+            }
+
+            // Validate password strength
+            if (password.length < 8) {
+                errorMessage.textContent = 'Password must be at least 8 characters long';
+                errorMessage.style.display = 'block';
+                return false;
+            }
+
+            // If validation passes, show success message
+            successMessage.textContent = 'Supervisor added successfully!';
+            successMessage.style.display = 'block';
+
+            // Reset form after successful submission
+            setTimeout(() => {
+                document.getElementById('supervisorForm').reset();
+                successMessage.style.display = 'none';
+                // Redirect to organization dashboard
+                window.location.href = 'org-dashboard.html';
+            }, 2000);
+
+            return false;
+        }
+
+        // Generate initial Supervisor ID when page loads
+        generateSupervisorId();
+    </script>
+</body>
+</html> 
